@@ -1,1 +1,109 @@
-/* You can add global styles to this file, and also import other style files */
+@use "../public/scss/variables";
+@use "../public/scss/base";
+@use "../public/scss/media";
+@use "../public/scss/fonts";
+@use "../public/scss/typography";
+
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: Space Grotesk,
+    density: 0,
+  ));
+
+  /********** CARD **********/
+  @include mat.card-overrides((
+    filled-container-shape: 4rem,
+    filled-container-color: var(--primary-600),
+    filled-container-elevation: 0 1rem 0 0 var(--neutral-900),
+    outlined-container-shape: 4rem,
+    outlined-container-color: var(--neutral-0),
+    outlined-container-elevation: 0 1rem 0 0 var(--neutral-900),
+    outlined-outline-width: 3px,
+    outlined-outline-color: var(--neutral-900),
+  ));
+
+  /********** BUTTON **********/
+  @include mat.button-overrides((
+    filled-container-shape: 2rem,
+    filled-horizontal-padding: 1.85rem,
+    filled-touch-target-size: 7.2rem,
+    filled-focus-state-layer-opacity: 0,
+    filled-hover-state-layer-opacity: 0,
+    filled-pressed-state-layer-opacity: 0,
+    filled-state-layer-color: transparent,
+    filled-label-text-size: 2.4rem,
+    filled-label-text-tracking: 0,
+    filled-label-text-weight: 700,
+    filled-container-height: 7.2rem,
+  ));
+
+  .btn {
+    text-transform: uppercase;
+    --state-color: var(--neutral-900);
+    transition: all .25s ease-in;
+    border: 3px solid var(--state-color);
+    box-shadow: 0 1rem 0 0 var(--state-color);
+
+    &--start {
+      justify-content: start;
+    }
+
+    &:has(.mat-icon) {
+      justify-content: space-between;
+
+      .mat-icon {
+        width: 8.2rem;
+        height: 4.6rem;
+        display: flex;
+        margin: 0;
+        order: 1;
+      }
+    }
+
+    &:not(:disabled) {
+      &:hover, &:focus {
+        --state-color: var(--primary-800);
+      }
+
+      &:active {
+        border-width: 0;
+        box-shadow: none;
+        transform: translateY(1rem);
+      }
+    }
+
+    &--primary {
+      @include mat.button-overrides((
+        filled-container-color: var(--red-500),
+        filled-label-text-color: var(--neutral-0),
+      ));
+    }
+
+    &--secondary {
+      @include mat.button-overrides((
+        filled-container-color: var(--yellow-500),
+        filled-label-text-color: var(--neutral-900),
+      ));
+    }
+
+    &--neutral {
+      @include mat.button-overrides((
+        filled-container-color: var(--neutral-0),
+        filled-label-text-color: var(--neutral-900),
+      ));
+    }
+  }
+
+  /********** DIALOG **********/
+}
+
+body {
+  color-scheme: light;
+  margin: 0;
+}

@@ -1,0 +1,38 @@
+body {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.heading {
+  color: var(--neutral-900);
+  letter-spacing: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &--xl {
+    font-size: 5.6rem;
+    line-height: 7.1rem;
+  }
+
+  &--lg {
+    font-size: 2.4rem;
+    line-height: 3.1rem;
+  }
+
+  &--md {
+    font-size: 2rem;
+    line-height: 2.6rem;
+  }
+
+  &--sm {
+    font-size: 1.6rem;
+    line-height: 2.1rem;
+  }
+}
+
+.text {
+  color: rgba(0, 0, 0, 66%);
+  font-size: 1.6rem;
+  line-height: 2.1rem;
+  letter-spacing: 0;
+  font-weight: 500;
+}

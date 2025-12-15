@@ -1,16 +1,33 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   template: `
-    <h1>Welcome to {{ title() }}!</h1>
-
-    <router-outlet />
+    <main>
+      <router-outlet />
+    </main>
   `,
-  styles: [],
+  styles: `
+    :host {
+      main {
+        min-height: 100vh;
+        background: var(--primary-600);
+      }
+    }
+  `,
 })
 export class App {
-  protected readonly title = signal('connect-four-game');
+  #matIconRegistry = inject(MatIconRegistry);
+  #domSanitizer = inject(DomSanitizer);
+
+  constructor() {
+    this.#matIconRegistry.addSvgIconSetInNamespace(
+      'custom',
+      this.#domSanitizer.bypassSecurityTrustResourceUrl('icons/icons.svg')
+    );
+  }
 }
