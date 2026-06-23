@@ -1,0 +1,28 @@
+<mat-card class="rules" appearance="outlined">
+  <mat-card-content class="rules__content">
+    <h1 class="heading heading--xl">Rules</h1>
+
+    <div class="rules__item">
+      <h2 class="rules__title heading heading--md">Objective</h2>
+      <p class="rules__text text">
+        Be the first player to connect 4 of the same colored discs in a row (either vertically,
+        horizontally, or diagonally).
+      </p>
+    </div>
+
+    <div class="rules__item">
+      <h2 class="rules__title heading heading--md">How to play</h2>
+      <ul class="rules__list text">
+        @for (rule of rules; track $index) {
+          <li>
+            <span>{{ $index + 1 }}</span>
+            <p>{{ rule }}</p>
+          </li>
+        }
+      </ul>
+    </div>
+  </mat-card-content>
+</mat-card>
+<a class="btn" matIconButton routerLink="/main-menu" [style.transform]="'translateY(-50%)'">
+  <mat-icon svgIcon="custom:check" />
+</a>

@@ -1,0 +1,22 @@
+
+:host {
+  height: 100vh;
+  background: var(--primary-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .menu {
+    max-width: 48.6rem;
+    flex: 1;
+    border: 3px solid var(--neutral-900);
+
+    &__content {
+      padding: 6.7rem 3.7rem 5.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7rem;
+    }
+  }
+}

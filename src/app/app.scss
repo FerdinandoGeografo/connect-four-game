@@ -1,0 +1,9 @@
+:host {
+  min-height: 100vh;
+  display: block;
+
+  main {
+    height: 100%;
+    background: var(--primary-600);
+  }
+}

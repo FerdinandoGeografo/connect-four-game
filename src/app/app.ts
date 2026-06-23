@@ -6,19 +6,8 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  template: `
-    <main>
-      <router-outlet />
-    </main>
-  `,
-  styles: `
-    :host {
-      main {
-        min-height: 100vh;
-        background: var(--primary-600);
-      }
-    }
-  `,
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
   #matIconRegistry = inject(MatIconRegistry);
@@ -27,7 +16,7 @@ export class App {
   constructor() {
     this.#matIconRegistry.addSvgIconSetInNamespace(
       'custom',
-      this.#domSanitizer.bypassSecurityTrustResourceUrl('icons/icons.svg')
+      this.#domSanitizer.bypassSecurityTrustResourceUrl('icons/icons.svg'),
     );
   }
 }

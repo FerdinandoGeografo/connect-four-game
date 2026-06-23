@@ -1,0 +1,14 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.card-overrides((
+    filled-container-shape: 4rem,
+    filled-container-color: var(--primary-600),
+    filled-container-elevation: 0 1rem 0 0 var(--neutral-900),
+    outlined-container-shape: 4rem,
+    outlined-container-color: var(--neutral-0),
+    outlined-container-elevation: 0 1rem 0 0 var(--neutral-900),
+    outlined-outline-width: 3px,
+    outlined-outline-color: var(--neutral-900),
+  ));
+}

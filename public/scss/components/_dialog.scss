@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+html {
+  .mdc-dialog__surface {
+    border: 3px solid var(--neutral-900);
+  }
+
+  @include mat.dialog-overrides((
+    container-color: var(--primary-600),
+    container-shape: 4rem,
+    container-max-width: 48.6rem,
+    container-small-max-width: calc(100% - 3.4rem),
+    container-min-width: 48.6rem,
+  ));
+
+  .cdk-overlay-backdrop {
+    background: rgba(0,0,0, .5);
+  }
+}

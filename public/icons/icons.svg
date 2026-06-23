@@ -26,14 +26,163 @@
           </g>
       </g>
   </symbol>
+  <symbol id="player-vs-cpu" width="82px" height="46px" viewBox="0 0 82 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>player-vs-cpu</title>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="player-vs-cpu">
+              <circle id="Oval-Copy-20" fill="#FFFFFF" cx="59" cy="23" r="23"></circle>
+              <g id="Group-2" transform="translate(39.000000, 3.000000)">
+                  <circle id="Oval-Copy-11" fill="#FD6687" cx="20" cy="20" r="20"></circle>
+                  <g id="Group-8" transform="translate(10.000000, 12.500000)" stroke="#FFFFFF" stroke-width="3">
+                      <g id="Group-10">
+                          <line x1="12.0833333" y1="0.416666667" x2="17.0833333" y2="0.416666667" id="Path-Copy"></line>
+                          <line x1="2.91666667" y1="0.416666667" x2="7.91666667" y2="0.416666667" id="Path-Copy-2"></line>
+                          <line x1="0" y1="6.25" x2="20" y2="6.25" id="Path-2"></line>
+                      </g>
+                  </g>
+              </g>
+              <circle id="Oval-Copy-19" fill="#FFFFFF" cx="23" cy="23" r="23"></circle>
+              <g id="Group" transform="translate(3.000000, 3.000000)">
+                  <circle id="Oval-Copy-11" fill="#FD6687" cx="20" cy="20" r="20"></circle>
+                  <g id="Group-8" transform="translate(10.000000, 11.666667)" stroke="#FFFFFF" stroke-width="3">
+                      <path d="M5,22.2916667 C10.5228475,22.2916667 15,17.8145142 15,12.2916667 C15,6.76881917 10.5228475,2.29166667 5,2.29166667" id="Oval-Copy-11" transform="translate(10.000000, 12.291667) rotate(90.000000) translate(-10.000000, -12.291667) "></path>
+                      <g id="Group-7" transform="translate(5.625000, 0.000000)">
+                          <line x1="0.416666667" y1="0" x2="0.416666667" y2="4.98700291" id="Path"></line>
+                          <line x1="8.75" y1="0" x2="8.75" y2="4.98700291" id="Path-Copy"></line>
+                      </g>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </symbol>
+  <symbol id="player-1" width="54px" height="59px" viewBox="0 0 54 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>player-one</title>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="player-one">
+              <circle id="Oval-Copy-21" fill="#000000" cx="27" cy="27" r="27"></circle>
+              <circle id="Oval-Copy-40" fill="#000000" cx="27" cy="32" r="27"></circle>
+              <circle id="Oval-Copy-11" fill="#FD6687" cx="27" cy="27" r="24"></circle>
+              <g id="Group-8" transform="translate(19.000000, 17.000000)" stroke="#000000" stroke-width="3">
+                  <path d="M6,26.75 C12.627417,26.75 18,21.377417 18,14.75 C18,8.122583 12.627417,2.75 6,2.75" id="Oval-Copy-11" transform="translate(12.000000, 14.750000) rotate(90.000000) translate(-12.000000, -14.750000) "></path>
+                  <g id="Group-7" transform="translate(9.750000, 0.000000)">
+                      <line x1="0.5" y1="0" x2="0.5" y2="5.9844035" id="Path"></line>
+                      <line x1="10.5" y1="0" x2="10.5" y2="5.9844035" id="Path-Copy"></line>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </symbol>
+  <symbol id="player-2" width="54px" height="59px" viewBox="0 0 54 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>player-two</title>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="player-two" transform="translate(27.000000, 29.500000) scale(-1, 1) translate(-27.000000, -29.500000) ">
+              <circle id="Oval-Copy-21" fill="#000000" cx="27" cy="27" r="27"></circle>
+              <circle id="Oval-Copy-40" fill="#000000" cx="27" cy="32" r="27"></circle>
+              <circle id="Oval-Copy-11" fill="#FFCE67" cx="27" cy="27" r="24"></circle>
+              <g id="Group-8" transform="translate(19.000000, 17.000000)" stroke="#000000" stroke-width="3">
+                  <path d="M6,26.75 C12.627417,26.75 18,21.377417 18,14.75 C18,8.122583 12.627417,2.75 6,2.75" id="Oval-Copy-11" transform="translate(12.000000, 14.750000) rotate(90.000000) translate(-12.000000, -14.750000) "></path>
+                  <g id="Group-7" transform="translate(9.750000, 0.000000)">
+                      <line x1="0.5" y1="0" x2="0.5" y2="5.9844035" id="Path"></line>
+                      <line x1="10.5" y1="0" x2="10.5" y2="5.9844035" id="Path-Copy"></line>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </symbol>
+  <symbol id="cpu" width="54px" height="59px" viewBox="0 0 54 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>cpu</title>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="cpu">
+              <circle id="Oval-Copy-21" fill="#000000" transform="translate(27.000000, 27.000000) scale(-1, 1) translate(-27.000000, -27.000000) " cx="27" cy="27" r="27"></circle>
+              <circle id="Oval-Copy-40" fill="#000000" transform="translate(27.000000, 32.000000) scale(-1, 1) translate(-27.000000, -32.000000) " cx="27" cy="32" r="27"></circle>
+              <circle id="Oval-Copy-11" fill="#FFCE67" transform="translate(27.000000, 27.000000) scale(-1, 1) translate(-27.000000, -27.000000) " cx="27" cy="27" r="24"></circle>
+              <g id="Group-8" transform="translate(15.000000, 18.000000)" stroke="#000000" stroke-width="3">
+                  <g id="Group-10">
+                      <line x1="14.5" y1="0.5" x2="20.5" y2="0.5" id="Path-Copy"></line>
+                      <line x1="3.5" y1="0.5" x2="9.5" y2="0.5" id="Path-Copy-2"></line>
+                      <line x1="0" y1="7.5" x2="24" y2="7.5" id="Path-2"></line>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </symbol>
+  <symbol id="you" width="54px" height="59px" viewBox="0 0 54 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>you</title>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="you" transform="translate(27.000000, 29.500000) scale(-1, 1) translate(-27.000000, -29.500000) ">
+              <circle id="Oval-Copy-21" fill="#000000" cx="27" cy="27" r="27"></circle>
+              <circle id="Oval-Copy-40" fill="#000000" cx="27" cy="32" r="27"></circle>
+              <circle id="Oval-Copy-11" fill="#FD6687" cx="27" cy="27" r="24"></circle>
+              <g id="Group-22" transform="translate(15.000000, 17.000000)" stroke="#000000" stroke-width="3">
+                  <path d="M6,27 C12.627417,27 18,21.627417 18,15 C18,8.372583 12.627417,3 6,3" id="Oval-Copy-11" transform="translate(12.000000, 15.000000) rotate(90.000000) translate(-12.000000, -15.000000) "></path>
+                  <g id="Group-7" transform="translate(7.000000, 0.000000)">
+                      <line x1="0.5" y1="0" x2="0.5" y2="5.9844035" id="Path"></line>
+                      <line x1="10.5" y1="0" x2="10.5" y2="5.9844035" id="Path-Copy"></line>
+                  </g>
+              </g>
+          </g>
+      </g>
+  </symbol>
   <symbol id="check" width="70px" height="75px" viewBox="0 0 70 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>icon-check</title>
       <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g id="icon-check">
-              <circle id="Oval-Copy-37" fill="#000000" cx="35" cy="35" r="35"></circle>
-              <circle id="Oval-Copy-38" fill="#000000" cx="35" cy="40" r="35"></circle>
+              <circle id="Oval-Copy-37" fill="var(--state-color)" cx="35" cy="35" r="35"></circle>
+              <circle id="Oval-Copy-38" fill="var(--state-color)" cx="35" cy="40" r="35"></circle>
               <circle id="Oval-Copy-39" fill="#FD6687" cx="35" cy="35" r="32"></circle>
               <polyline id="Path" stroke="#FFFFFF" stroke-width="3" points="20 34.5819497 30.2640104 44.84596 50.1099704 25"></polyline>
+          </g>
+      </g>
+  </symbol>
+  <symbol id="turn-bg" width="197" height="165" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <filter x="-4.2%" y="-4.2%" width="108.4%" height="116.2%" filterUnits="objectBoundingBox" id="a">
+        <feMorphology radius="3" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"/>
+        <feOffset dy="10" in="shadowSpreadOuter1" result="shadowOffsetOuter1"/>
+        <feComposite in="shadowOffsetOuter1" in2="SourceAlpha" operator="out" result="shadowOffsetOuter1"/>
+        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" in="shadowOffsetOuter1"/>
+      </filter>
+      <path d="M12.239 34.847 87.279 3.25a20 20 0 0 1 15.454-.029l75.96 31.65A20 20 0 0 1 191 53.333V130c0 11.046-8.954 20-20 20H20c-11.046 0-20-8.954-20-20V53.28a20 20 0 0 1 12.239-18.433Z" id="b"/>
+    </defs>
+    <g transform="translate(3 2)" fill="none" fill-rule="evenodd">
+      <use fill="#000" filter="url(#a)" xlink:href="#b"/>
+      <path stroke="#000" stroke-width="3" d="M86.697 1.868a21.5 21.5 0 0 1 16.613-.03l75.96 31.65a21.478 21.478 0 0 1 9.62 7.92 21.478 21.478 0 0 1 3.61 11.925V130a21.433 21.433 0 0 1-6.297 15.203A21.433 21.433 0 0 1 171 151.5H20a21.433 21.433 0 0 1-15.203-6.297A21.433 21.433 0 0 1-1.5 130V53.28c0-4.326 1.296-8.44 3.589-11.893a21.478 21.478 0 0 1 9.568-7.923Z" fill="currentColor"/>
+    </g>
+  </symbol>
+  <symbol id="marker" width="38" height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_d_5_5709)">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M3 14.6159C3 16.194 3.74501 17.6795 5.0098 18.6233L15.9416 26.7804C17.708 28.0984 20.129 28.1045 21.9019 26.7953L32.9701 18.6225C34.2467 17.6799 35 16.1872 35 14.6002V8C35 5.23858 32.7614 3 30 3H8C5.23858 3 3 5.23858 3 8V14.6159Z" fill="currentColor"/>
+      <path d="M15.0449 27.9824C17.3412 29.6957 20.4882 29.7038 22.793 28.002L33.8613 19.8291C35.5207 18.6037 36.4999 16.6634 36.5 14.6006V8C36.5 4.41015 33.5899 1.5 30 1.5H8C4.41015 1.5 1.5 4.41015 1.5 8V14.6162C1.50008 16.6675 2.4684 18.5983 4.1123 19.8252L15.0449 27.9824Z" stroke="black" stroke-width="3"/>
+    </g>
+    <defs>
+      <filter id="filter0_d_5_5709" x="0" y="0" width="38" height="35.7731" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="5"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_5_5709"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_5_5709" result="shape"/>
+      </filter>
+    </defs>
+  </symbol>
+  <symbol id="counter" width="70px" height="75px" viewBox="0 0 70 75" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <title>counter</title>
+      <defs>
+          <circle id="path-1" cx="35" cy="35" r="32"></circle>
+          <filter x="-3.9%" y="-3.9%" width="107.8%" height="107.8%" filterUnits="objectBoundingBox" id="filter-2">
+              <feOffset dx="0" dy="5" in="SourceAlpha" result="shadowOffsetInner1"></feOffset>
+              <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+              <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+          </filter>
+      </defs>
+      <g id="Designs" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="counter-large">
+              <circle id="Oval-Copy-41" fill="#000000" cx="35" cy="35" r="35"></circle>
+              <circle id="Oval-Copy-42" fill="#000000" cx="35" cy="40" r="35"></circle>
+              <g id="Oval-Copy-43">
+                  <use fill="var(--counter-bg)" fill-rule="evenodd" xlink:href="#path-1"></use>
+                  <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+              </g>
           </g>
       </g>
   </symbol>

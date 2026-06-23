@@ -1,0 +1,119 @@
+@use '@angular/material' as mat;
+
+.btn {
+  &.mdc-button {
+    --state-color: var(--neutral-900);
+    text-transform: uppercase;
+    transition: all .35s ease-in-out;
+    border: 3px solid var(--state-color);
+    box-shadow: 0 1rem 0 0 var(--state-color);
+  }
+
+  @include mat.button-overrides((
+    filled-container-shape: 2rem,
+    filled-horizontal-padding: 1.85rem,
+    filled-touch-target-size: 7.8rem,
+    filled-focus-state-layer-opacity: 0,
+    filled-hover-state-layer-opacity: 0,
+    filled-pressed-state-layer-opacity: 0,
+    filled-state-layer-color: transparent,
+    filled-label-text-size: 2.4rem,
+    filled-label-text-tracking: 0,
+    filled-label-text-weight: 700,
+    filled-container-height: 7.8rem,
+  ));
+
+  @include mat.icon-button-overrides((
+    icon-size: 7.8rem,
+    touch-target-size: 7.8rem,
+    state-layer-size: 7.8rem,
+  ));
+
+  &:not(.mat-icon) {
+    justify-content: start;
+  }
+
+  &.btn--center {
+    justify-content: center;
+  }
+
+  &:has(.mat-icon) {
+    justify-content: space-between;
+
+    .mat-icon {
+      width: 8.2rem;
+      height: 4.6rem;
+      display: flex;
+      margin: 0;
+      order: 1;
+    }
+  }
+
+  &:not(:disabled) {
+    &:hover, &:focus {
+      --state-color: var(--primary-800);
+    }
+
+    &:active {
+      box-shadow: none;
+    }
+  }
+
+  &--primary {
+    @include mat.button-overrides((
+      filled-container-color: var(--red-500),
+      filled-label-text-color: var(--neutral-0),
+    ));
+  }
+
+  &--secondary {
+    @include mat.button-overrides((
+      filled-container-color: var(--yellow-500),
+      filled-label-text-color: var(--neutral-900),
+    ));
+  }
+
+  &--neutral {
+    @include mat.button-overrides((
+      filled-container-color: var(--neutral-0),
+      filled-label-text-color: var(--neutral-900),
+    ));
+  }
+
+  &--tertiary {
+    @include mat.button-overrides((
+      filled-container-color: var(--primary-800),
+      filled-label-text-color: var(--neutral-0),
+    ));
+
+    &:not(:disabled) {
+      &:hover, &:focus {
+        @include mat.button-overrides((
+          filled-container-color: var(--red-500)
+        ));
+      }
+    }
+  }
+
+  &--small {
+    &.mdc-button {
+      box-shadow: none;
+      border: none;
+    }
+
+    @include mat.button-overrides((
+      filled-touch-target-size: 3.9rem,
+      filled-horizontal-padding: 2.05rem,
+      filled-label-text-size: 1.6rem,
+      filled-container-height: 3.9rem,
+    ));
+  }
+
+  &.mdc-icon-button {
+    --state-color: var(--neutral-900);
+    .mat-icon {
+      width: var(--mat-icon-button-state-layer-size);
+      height: var(--mat-icon-button-state-layer-size);
+    }
+  }
+}

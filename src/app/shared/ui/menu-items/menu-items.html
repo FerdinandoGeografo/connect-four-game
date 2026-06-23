@@ -1,0 +1,12 @@
+@for (item of items(); track $index) {
+  <button
+    class="btn {{ item.styleClass ?? 'btn--primary' }}"
+    matButton="filled"
+    (click)="item.onClick()"
+  >
+    {{ item.label }}
+    @if (item.icon) {
+      <mat-icon svgIcon="custom:{{ item.icon }}" />
+    }
+  </button>
+}
