@@ -1,0 +1,106 @@
+:host {
+  width: 63.2rem;
+  height: 59.4rem;
+  position: relative;
+  z-index: 10;
+
+  .board {
+    &__marker {
+      position: absolute;
+      top: -1px;
+      width: 3.8rem;
+      height: 3.6rem;
+      z-index: 10;
+      transform: translateY(-100%);
+      transition: left .15s ease, color .35s, opacity .35s;
+      animation: bounce 1.5s infinite;
+      pointer-events: none;
+
+      &--hidden {
+        opacity: 0;
+      }
+    }
+
+    &__layer {
+      position: absolute;
+      inset: 0;
+
+      &--front {
+        z-index: 6;
+        pointer-events: none;
+      }
+
+      &--columns {
+        z-index: 5;
+        display: flex;
+        gap: 1.8rem;
+        padding: 1.7rem 1.7rem 6.2rem;
+      }
+
+      &--back {
+        z-index: 4;
+        pointer-events: none;
+      }
+    }
+
+    &__column {
+      all: unset;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+      padding: 0;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+
+      &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+    }
+
+    &__cell {
+      width: 7rem;
+      height: 7.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+        border-radius: 50%;
+        transition: background-color .35s, opacity .35;
+      }
+
+      &--preview::after {
+        background-color: var(--preview-color);
+        opacity: .25;
+      }
+    }
+
+    &__disc {
+      width: 7rem;
+      height: 7.5rem;
+      transition: opacity .2s;
+    }
+  }
+}
+
+@keyframes bounce {
+  50% {
+    transform: translateY(-120%);
+  }
+
+  100% {
+    transform: translateY(-100%);
+  }
+}

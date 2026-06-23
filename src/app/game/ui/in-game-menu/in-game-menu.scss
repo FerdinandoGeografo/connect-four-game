@@ -1,0 +1,11 @@
+:host {
+  padding: 5rem 3.7rem 4.7rem 3.7rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4.1rem;
+
+  .heading--xl {
+    color: var(--neutral-0);
+  }
+}

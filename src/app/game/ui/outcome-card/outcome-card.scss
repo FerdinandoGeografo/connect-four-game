@@ -1,0 +1,22 @@
+:host {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 11rem);
+  z-index: 10;
+
+  .outcome {
+    width: 29.1rem;
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.7rem 0;
+
+      .heading--sm {
+        line-height: 1;
+      }
+    }
+  }
+}

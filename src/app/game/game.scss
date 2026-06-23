@@ -1,0 +1,40 @@
+@use '../../../public/scss/media' as *;
+
+:host {
+  padding: 5rem 0 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4.5rem;
+
+  .game {
+    &__content {
+      display: flex;
+      gap: 5.7rem;
+      align-items: center;
+      position: relative;
+    }
+
+    &__banner {
+      background-color: var(--banner-color, var(--primary-800));
+      transition: background-color .35s;
+      border-radius: 6rem 6rem 0 0;
+      height: 20rem;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      z-index: 1;
+    }
+  }
+
+  @include respond(tablet) {
+    padding: 3rem 0 0;
+
+    .game {
+      &__banner {
+        height: 23.4rem;
+      }
+    }
+  }
+}

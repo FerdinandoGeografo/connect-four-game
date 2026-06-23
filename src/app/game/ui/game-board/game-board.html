@@ -1,0 +1,38 @@
+<mat-icon
+  class="board__marker"
+  svgIcon="custom:marker"
+  [style.color]="gameStore.currentPlayerThemeVar()"
+  [style.left.px]="markerLeft()"
+  [class.board__marker--hidden]="hoveredColumn() === null || gameStore.phase() !== 'running'"
+/>
+
+<img class="board__layer board__layer--front" src="images/board-layer-white-large.svg" alt="" />
+
+<div class="board__layer board__layer--columns">
+  @for (col of columns; track col) {
+    <button
+      class="board__column"
+      [disabled]="gameStore.phase() !== 'running' || !gameStore.playableColumns().includes(col)"
+      (mouseover)="onColumnHover(col)"
+      (click)="onColumnClick(col)"
+    >
+      @for (row of rows; track row) {
+        <div
+          class="board__cell"
+          [class.board__cell--preview]="previewCell()?.column === col && previewCell()?.row === row"
+          [style.--preview-color]="gameStore.currentPlayerThemeVar()"
+        >
+          @if (this.gameStore.board()[row][col]) {
+            <mat-icon
+              class="board__disc"
+              svgIcon="custom:counter"
+              [style.--counter-bg]="gameStore.currentPlayerThemeVar()"
+            />
+          }
+        </div>
+      }
+    </button>
+  }
+</div>
+
+<img class="board__layer board__layer--back" src="images/board-layer-black-large.svg" alt="" />

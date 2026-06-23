@@ -1,0 +1,27 @@
+<app-game-toolbar
+  (menuGameClicked)="openGameMenu()"
+  (restartGameClicked)="gameStore.restartGame()"
+/>
+
+<div class="game__content">
+  <app-score-card [player]="gameStore.players().first" />
+
+  <app-game-board />
+
+  @if (gameStore.isRoundOver()) {
+    <app-outcome-card [winner]="gameStore.winner()" (playAgainClicked)="gameStore.startRound()" />
+  } @else {
+    <app-turn-indicator
+      [currentPlayer]="gameStore.currentPlayer()"
+      [time]="gameStore.secondsLeft()"
+    />
+  }
+
+  <app-score-card [player]="gameStore.players().second" />
+</div>
+
+<div
+  class="game__banner"
+  aria-hidden="true"
+  [style.--banner-color]="gameStore.bannerThemeVar()"
+></div>

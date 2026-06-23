@@ -1,0 +1,13 @@
+<mat-card appearance="outlined" class="outcome">
+  <mat-card-content class="outcome__content">
+    <p class="heading heading--sm">{{ winner()?.label | uppercase }}</p>
+    <p class="heading heading--xl">Wins</p>
+    <button
+      class="btn btn--small btn--tertiary"
+      matButton="filled"
+      (click)="playAgainClicked.emit()"
+    >
+      Play again
+    </button>
+  </mat-card-content>
+</mat-card>
