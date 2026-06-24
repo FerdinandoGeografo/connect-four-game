@@ -1,4 +1,3 @@
-import { UpperCasePipe } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -6,7 +5,7 @@ import { Player } from '../../../shared/models/player.model';
 
 @Component({
   selector: 'app-outcome-card',
-  imports: [MatCard, MatCardContent, MatButton, UpperCasePipe],
+  imports: [MatCard, MatCardContent, MatButton],
   templateUrl: './outcome-card.html',
   styleUrl: './outcome-card.scss',
 })
