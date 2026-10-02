@@ -1,7 +1,7 @@
 <mat-icon class="score__icon" svgIcon="custom:{{ player().icon }}" />
 <mat-card class="score" appearance="outlined">
   <mat-card-content class="score__content">
-    <p class="heading heading--md">{{ player().label | uppercase }}</p>
-    <p class="heading heading--xl">{{ player().score }}</p>
+    <p class="heading heading--md">{{ player().label }}</p>
+    <p class="heading heading--xl">{{ score() }}</p>
   </mat-card-content>
 </mat-card>

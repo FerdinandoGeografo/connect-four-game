@@ -1,7 +1,7 @@
-<mat-icon class="turn__icon" svgIcon="custom:turn-bg" [style.color]="playerThemeColor()" />
+<mat-icon class="turn__icon" svgIcon="custom:turn-bg" [style.color]="currentPlayer().theme" />
 <div class="turn__content" [style.--turn-color]="textColor()">
   <p class="heading heading--sm">
-    {{ currentPlayer().turnLabel | uppercase }}
+    {{ currentPlayer().turnLabel }}
   </p>
   <p class="heading heading--xl">{{ time() }}s</p>
 </div>
