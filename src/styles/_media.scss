@@ -20,6 +20,10 @@ $breakpoints: (
 // (e.g. tablets at 1024 × 768).
 $side-layout-landscape-min: 50em;
 
+// Below this height (landscape phones) stacked cards such as the pause menu no
+// longer fit at their design size and switch to a compact variant.
+$short-max-height: 31.25em;
+
 @function breakpoint($name) {
   @if not map.has-key($breakpoints, $name) {
     @error 'Unknown breakpoint `#{$name}`. Expected one of: #{map.keys($breakpoints)}.';
@@ -43,6 +47,12 @@ $side-layout-landscape-min: 50em;
 @mixin side-layout {
   @media (min-width: breakpoint(lg)),
     (orientation: landscape) and (min-width: $side-layout-landscape-min) {
+    @content;
+  }
+}
+
+@mixin short {
+  @media (max-height: $short-max-height) {
     @content;
   }
 }

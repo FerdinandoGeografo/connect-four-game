@@ -1,40 +1,53 @@
 <h1 class="cdk-visually-hidden">Connect Four</h1>
 
 <app-game-toolbar
+  class="game__toolbar"
   (menuGameClicked)="openGameMenu()"
   (restartGameClicked)="gameStore.restartGame()"
 />
 
 <div class="game__content">
-  <app-score-card [player]="gameStore.players().first" [score]="gameStore.scores().first" />
-
-  <app-game-board
-    [board]="gameStore.board()"
-    [cells]="gameStore.cells()"
-    [players]="gameStore.players()"
-    [currentPlayer]="gameStore.currentPlayer()"
-    [canPlay]="gameStore.canPlay()"
-    [playableColumns]="gameStore.playableColumns()"
-    [winningCells]="gameStore.winningCells()"
-    (discDropped)="gameStore.dropDisc($event)"
+  <app-score-card
+    class="game__score game__score--first"
+    side="start"
+    [player]="gameStore.players().first"
+    [score]="gameStore.scores().first"
   />
 
-  @if (gameStore.isRoundOver()) {
-    <app-outcome-card [winner]="gameStore.winner()" (playAgainClicked)="gameStore.startRound()" />
-  } @else {
-    <app-turn-indicator
-      [currentPlayer]="gameStore.currentPlayer()"
-      [time]="gameStore.secondsLeft()"
-    />
-  }
+  <app-score-card
+    class="game__score game__score--second"
+    side="end"
+    [player]="gameStore.players().second"
+    [score]="gameStore.scores().second"
+  />
 
-  <app-score-card [player]="gameStore.players().second" [score]="gameStore.scores().second" />
+  <div class="game__board">
+    <app-game-board
+      [board]="gameStore.board()"
+      [cells]="gameStore.cells()"
+      [players]="gameStore.players()"
+      [currentPlayer]="gameStore.currentPlayer()"
+      [canPlay]="gameStore.canPlay()"
+      [playableColumns]="gameStore.playableColumns()"
+      [winningCells]="gameStore.winningCells()"
+      (discDropped)="gameStore.dropDisc($event)"
+    />
+
+    @if (gameStore.isRoundOver()) {
+      <app-outcome-card [winner]="gameStore.winner()" (playAgainClicked)="gameStore.startRound()" />
+    } @else {
+      <app-turn-indicator
+        [currentPlayer]="gameStore.currentPlayer()"
+        [time]="gameStore.secondsLeft()"
+      />
+    }
+
+    <div
+      class="game__banner"
+      aria-hidden="true"
+      [style.--banner-color]="gameStore.bannerThemeVar()"
+    ></div>
+  </div>
 </div>
 
 <p class="cdk-visually-hidden" role="status">{{ gameStore.statusMessage() }}</p>
-
-<div
-  class="game__banner"
-  aria-hidden="true"
-  [style.--banner-color]="gameStore.bannerThemeVar()"
-></div>

@@ -1,7 +1,23 @@
+@use 'media' as *;
+
 :host {
-  width: 100%;
-  max-width: 63.2rem;
-  display: inline-flex;
+  // Height of the logo group in the frames; the logo's shadow may overflow it.
+  height: 4rem;
+  display: flex;
   align-items: center;
   justify-content: space-between;
+
+  app-logo {
+    width: 4.5rem;
+    height: 4.7rem;
+  }
+
+  @include up(md) {
+    height: 5.2rem;
+
+    app-logo {
+      width: 5.8rem;
+      height: 6.1rem;
+    }
+  }
 }

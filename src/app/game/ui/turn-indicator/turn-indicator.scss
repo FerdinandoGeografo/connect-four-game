@@ -1,14 +1,10 @@
 @use 'media' as *;
 
 :host {
-  display: inline-block;
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 11rem);
+  display: block;
+  position: relative;
   width: 19.7rem;
   height: 16.5rem;
-  z-index: 10;
 
   .turn {
     &__icon {
