@@ -20,10 +20,10 @@ import {
   getPlayableColumns,
   isBoardFull,
   placeDisc,
-} from '../domain/connect-four';
+} from '../utils/connect-four';
 
-const CPU_THINK_MIN_MS = 700;
-const CPU_THINK_MAX_MS = 1500;
+const CPU_THINK_MIN_MS = 1250;
+const CPU_THINK_MAX_MS = 2500;
 
 @Injectable({
   providedIn: 'root',
