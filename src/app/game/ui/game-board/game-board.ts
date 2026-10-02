@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   Board,
   BOARD_COLUMNS,
@@ -16,6 +16,7 @@ import { GameCell } from './game-cell/game-cell';
   selector: 'app-game-board',
   imports: [MatIcon, GameCell],
   templateUrl: './game-board.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game-board.scss',
 })
 export class GameBoard {

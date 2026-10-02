@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, output, ChangeDetectionStrategy } from '@angular/core';
 import { Logo } from '../../../shared/ui/logo/logo';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-game-toolbar',
   imports: [MatButtonModule, Logo],
   templateUrl: './game-toolbar.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game-toolbar.scss',
 })
 export class GameToolbar {

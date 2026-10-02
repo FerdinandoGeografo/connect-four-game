@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { GameToolbar } from './ui/game-toolbar/game-toolbar';
 import { ScoreCard } from './ui/score-card/score-card';
 import { TurnIndicator } from './ui/turn-indicator/turn-indicator';
@@ -15,6 +15,7 @@ import { GameBoard } from './ui/game-board/game-board';
   selector: 'app-game',
   imports: [GameToolbar, ScoreCard, TurnIndicator, OutcomeCard, GameBoard],
   templateUrl: './game.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game.scss',
 })
 export class Game {

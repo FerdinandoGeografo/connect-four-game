@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { Player } from '../../../shared/models/player.model';
@@ -7,6 +7,7 @@ import { Player } from '../../../shared/models/player.model';
   selector: 'app-outcome-card',
   imports: [MatCard, MatCardContent, MatButton],
   templateUrl: './outcome-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './outcome-card.scss',
 })
 export class OutcomeCard {
