@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
+import { GameStore } from './shared/data-access/game-store';
 
 export const routes: Routes = [
   {
@@ -7,6 +9,10 @@ export const routes: Routes = [
   },
   {
     path: 'game',
+    // A game can only be entered after choosing a mode from the main menu.
+    canActivate: [
+      () => inject(GameStore).phase() !== 'idle' || inject(Router).createUrlTree(['/main-menu']),
+    ],
     loadComponent: () => import('./game/game').then((c) => c.Game),
   },
   {

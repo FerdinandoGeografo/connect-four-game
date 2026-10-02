@@ -1,21 +1,29 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
-import { GameMode, GamePhase } from '../models/game.model';
+import { computed, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EMPTY, interval, map, Subject, switchMap, timer } from 'rxjs';
+import { GameMode, GamePhase, RoundEnd } from '../models/game.model';
 import {
   Board,
-  BOARD_COLUMNS,
   BOARD_ROWS,
+  BOARD_COLUMNS,
   CellData,
   CellPosition,
-  CONNECT_LENGTH,
   createEmptyBoard,
-  findLandingRow,
   TURN_DURATION_SECONDS,
-  WIN_DIRECTIONS,
   WinCells,
 } from '../models/board.model';
 import { GamePlayers, PlayerCode, ScorePlayers, getPlayersByMode } from '../models/player.model';
-import { delay, exhaustMap, filter, interval, of, Subject } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  chooseCpuColumn,
+  findWin,
+  getOpponent,
+  getPlayableColumns,
+  isBoardFull,
+  placeDisc,
+} from '../domain/connect-four';
+
+const CPU_THINK_MIN_MS = 700;
+const CPU_THINK_MAX_MS = 1500;
 
 @Injectable({
   providedIn: 'root',
@@ -29,9 +37,7 @@ export class GameStore {
   readonly board = computed(() => this.state().board);
   readonly currentPlayerCode = computed(() => this.state().currentPlayer);
   readonly currentPlayer = computed(() => this.players()[this.currentPlayerCode()]);
-  readonly currentOpponentCode = computed(() =>
-    this.currentPlayerCode() === 'first' ? 'second' : 'first',
-  );
+  readonly currentOpponentCode = computed(() => getOpponent(this.currentPlayerCode()));
   readonly scores = computed(() => this.state().scores);
   readonly winner = computed(() => {
     const winnerCode = this.state().winner;
@@ -42,13 +48,9 @@ export class GameStore {
 
   readonly isRoundOver = computed(() => this.phase() === 'round-over');
   readonly isCpuTurn = computed(() => this.currentPlayer().type === 'cpu');
-  readonly playableColumns = computed(() => {
-    const board = this.board();
-
-    return Array.from({ length: BOARD_COLUMNS }, (_, column) => column).filter(
-      (column) => board[0][column] === null,
-    );
-  });
+  /** True when the local player may drop a disc right now. */
+  readonly canPlay = computed(() => this.phase() === 'running' && !this.isCpuTurn());
+  readonly playableColumns = computed(() => getPlayableColumns(this.board()));
   readonly bannerThemeVar = computed(() => {
     const winner = this.winner();
     if (!winner) return 'var(--primary-800)';
@@ -71,6 +73,7 @@ export class GameStore {
             row,
             column: col,
           },
+          player: cell,
           theme: players[cell].theme,
         });
       }
@@ -78,61 +81,96 @@ export class GameStore {
     return result;
   });
 
+  /**
+   * Text for the polite live region: it changes only on moves, turn changes,
+   * pause and round end, never on timer ticks.
+   */
+  readonly statusMessage = computed(() => {
+    const { phase, players, lastMove, roundEnd } = this.state();
+    const current = this.currentPlayer();
+
+    switch (phase) {
+      case 'idle':
+        return '';
+      case 'paused':
+        return 'Game paused.';
+      case 'round-over': {
+        const winner = this.winner();
+        if (!winner) return 'The board is full. Draw.';
+        const result = `${winner.label} ${winner.winVerb}`;
+        return roundEnd === 'timeout' ? `Time's up. ${result}.` : `${result} with four in a row.`;
+      }
+      case 'running': {
+        if (!lastMove) return `${current.turnLabel}.`;
+        const mover = players[lastMove.player];
+        return `${mover.label} dropped a disc in column ${lastMove.position.column + 1}. ${current.turnLabel}.`;
+      }
+    }
+  });
+
   private readonly cpuMove$ = new Subject<void>();
+  private readonly turnTimer$ = new Subject<void>();
 
   constructor() {
-    //effect(() => console.log('[GAME] :\t', this.state()));
-    effect(() => {
-      console.log('Board Changed: ', this.board());
-    });
-
-    interval(1000)
-      .pipe(takeUntilDestroyed())
+    // Restart the 1s interval at the start of every turn so each turn gets full seconds.
+    this.turnTimer$
+      .pipe(
+        switchMap(() => interval(1000)),
+        takeUntilDestroyed(),
+      )
       .subscribe(() => this.handleTick());
 
     this.cpuMove$
       .pipe(
-        filter(() => this.phase() === 'running' && this.isCpuTurn()),
-        exhaustMap(() => {
-          const column = this.chooseCpuColumn();
-          const thinkMs = 700 + Math.random() * (1500 - 700);
-          console.log('Column chosen: ', column);
-          return of(column).pipe(delay(thinkMs));
+        switchMap(() => {
+          const board = this.board();
+          const column = chooseCpuColumn(board, this.currentPlayerCode());
+          if (column === null) return EMPTY;
+
+          const thinkMs = CPU_THINK_MIN_MS + Math.random() * (CPU_THINK_MAX_MS - CPU_THINK_MIN_MS);
+          return timer(thinkMs).pipe(map(() => ({ board, column })));
         }),
         takeUntilDestroyed(),
       )
-      .subscribe((column) => this.applyDrop(column));
+      .subscribe(({ board, column }) => {
+        // Pause, restart or quit may have happened while the CPU was "thinking".
+        if (this.phase() !== 'running' || !this.isCpuTurn() || this.board() !== board) return;
+        this.applyDrop(column);
+      });
   }
 
   startGame(mode: GameMode) {
     this.patchState({
+      ...initialState,
       mode,
       phase: 'running',
       players: getPlayersByMode(mode),
-      board: createEmptyBoard(),
-      currentPlayer: 'first',
-      scores: { first: 0, second: 0 },
-      winner: null,
-      winningCells: null,
-      secondsLeft: TURN_DURATION_SECONDS,
     });
-    this.triggerCpuIfNeeded();
+    this.startTurn();
   }
 
   restartGame() {
+    if (this.phase() === 'idle') return;
     this.startGame(this.mode());
   }
 
   startRound() {
+    if (this.phase() !== 'round-over') return;
+
+    // The starter of the previous round goes second in the next one.
+    const startingPlayer = getOpponent(this.state().startingPlayer);
     this.patchState({
       phase: 'running',
       board: createEmptyBoard(),
-      currentPlayer: this.currentOpponentCode(),
-      secondsLeft: TURN_DURATION_SECONDS,
+      currentPlayer: startingPlayer,
+      startingPlayer,
       winner: null,
       winningCells: null,
+      roundEnd: null,
+      lastMove: null,
+      secondsLeft: TURN_DURATION_SECONDS,
     });
-    this.triggerCpuIfNeeded();
+    this.startTurn();
   }
 
   pauseGame() {
@@ -143,7 +181,7 @@ export class GameStore {
   resumeGame() {
     if (this.phase() !== 'paused') return;
     this.patchState({ phase: 'running' });
-    this.triggerCpuIfNeeded();
+    this.startTurn();
   }
 
   destroyGame() {
@@ -151,40 +189,40 @@ export class GameStore {
   }
 
   dropDisc(column: number) {
-    if (this.phase() !== 'running') return;
-    if (this.isCpuTurn()) return;
+    if (!this.canPlay()) return;
     if (!this.playableColumns().includes(column)) return;
 
     this.applyDrop(column);
   }
 
   private applyDrop(column: number) {
-    const landingRow = findLandingRow(this.board(), column);
-    if (landingRow === -1) return;
+    const player = this.currentPlayerCode();
+    const placement = placeDisc(this.board(), column, player);
+    if (!placement) return;
 
-    const newBoard = this.board().map((boardRow, rowIndex) =>
-      rowIndex !== landingRow
-        ? boardRow
-        : boardRow.map((cell, colIndex) => (colIndex === column ? this.currentPlayerCode() : cell)),
-    );
+    const { board, position } = placement;
+    const lastMove = { player, position };
 
-    const win = this.checkWin(newBoard, landingRow, column, this.currentPlayerCode());
+    const win = findWin(board, position, player);
     if (win) {
       this.patchState({
-        board: newBoard,
+        board,
+        lastMove,
         phase: 'round-over',
-        winner: this.currentPlayerCode(),
+        roundEnd: 'connect',
+        winner: player,
         winningCells: win,
-        scores: this.incrementScore(this.currentPlayerCode()),
+        scores: this.incrementScore(player),
       });
       return;
     }
 
-    const isDraw = newBoard[0].every((cell) => cell !== null);
-    if (isDraw) {
+    if (isBoardFull(board)) {
       this.patchState({
-        board: newBoard,
+        board,
+        lastMove,
         phase: 'round-over',
+        roundEnd: 'draw',
         winner: null,
         winningCells: null,
       });
@@ -192,79 +230,12 @@ export class GameStore {
     }
 
     this.patchState({
-      board: newBoard,
-      currentPlayer: this.currentOpponentCode(),
+      board,
+      lastMove,
+      currentPlayer: getOpponent(player),
       secondsLeft: TURN_DURATION_SECONDS,
     });
-    this.triggerCpuIfNeeded();
-  }
-
-  private chooseCpuColumn() {
-    const playableColumns = this.playableColumns();
-    const cpuCode = this.currentPlayerCode();
-    const opponentCode = this.currentOpponentCode();
-
-    const winning = playableColumns.find((col) => this.simulateWin(col, cpuCode));
-    if (winning !== undefined) return winning;
-
-    const blocking = playableColumns.find((col) => this.simulateWin(col, opponentCode));
-    if (blocking !== undefined) return blocking;
-
-    const center = Math.floor(BOARD_COLUMNS / 2);
-    const sorted = [...playableColumns].sort((a, b) => Math.abs(a - center) - Math.abs(b - center));
-    const minDist = Math.abs(sorted[0] - center);
-    const best = sorted.filter((col) => Math.abs(col - center) === minDist);
-    return best[Math.floor(Math.random() * best.length)];
-  }
-
-  private simulateWin(column: number, playerCode: PlayerCode) {
-    const row = findLandingRow(this.board(), column);
-    if (row === -1) return false;
-
-    const simBoard = this.board().map((boardRow, rowIndex) =>
-      rowIndex !== row
-        ? boardRow
-        : boardRow.map((cell, colIndex) => (colIndex !== column ? cell : playerCode)),
-    );
-    return !!this.checkWin(simBoard, row, column, playerCode);
-  }
-
-  private checkWin(
-    board: Board,
-    row: number,
-    col: number,
-    playerCode: PlayerCode,
-  ): WinCells | null {
-    for (const { row: dRow, column: dCol } of WIN_DIRECTIONS) {
-      const forward = this.collect(board, row, col, dRow, dCol, playerCode);
-      const backward = this.collect(board, row, col, -dRow, -dCol, playerCode);
-
-      if (1 + forward.length + backward.length >= CONNECT_LENGTH) {
-        const all = [...backward.reverse(), { row, column: col }, ...forward];
-        return all.slice(0, CONNECT_LENGTH) as WinCells;
-      }
-    }
-    return null;
-  }
-
-  private collect(
-    board: Board,
-    startRow: number,
-    startCol: number,
-    dRow: number,
-    dCol: number,
-    playerCode: PlayerCode,
-  ): CellPosition[] {
-    const cells: CellPosition[] = [];
-    let r = startRow + dRow;
-    let c = startCol + dCol;
-
-    while (r >= 0 && r < BOARD_ROWS && c >= 0 && c < BOARD_COLUMNS && board[r][c] === playerCode) {
-      cells.push({ row: r, column: c });
-      r += dRow;
-      c += dCol;
-    }
-    return cells;
+    this.startTurn();
   }
 
   private handleTick() {
@@ -272,11 +243,13 @@ export class GameStore {
 
     const next = this.secondsLeft() - 1;
     if (next <= 0) {
+      const winner = this.currentOpponentCode();
       this.patchState({
         secondsLeft: 0,
         phase: 'round-over',
-        winner: this.currentOpponentCode(),
-        scores: this.incrementScore(this.currentOpponentCode()),
+        roundEnd: 'timeout',
+        winner,
+        scores: this.incrementScore(winner),
       });
       return;
     }
@@ -291,7 +264,8 @@ export class GameStore {
     };
   }
 
-  private triggerCpuIfNeeded() {
+  private startTurn() {
+    this.turnTimer$.next();
     if (this.isCpuTurn()) this.cpuMove$.next();
   }
 
@@ -306,23 +280,29 @@ interface GameState {
   players: GamePlayers;
   board: Board;
   currentPlayer: PlayerCode;
+  startingPlayer: PlayerCode;
   scores: ScorePlayers;
   winner: PlayerCode | null;
   winningCells: WinCells | null;
+  roundEnd: RoundEnd | null;
+  lastMove: { player: PlayerCode; position: CellPosition } | null;
   secondsLeft: number;
 }
 
 const initialState: GameState = {
   mode: 'pvp',
-  phase: 'paused',
+  phase: 'idle',
   players: getPlayersByMode('pvp'),
   board: createEmptyBoard(),
   currentPlayer: 'first',
+  startingPlayer: 'first',
   scores: {
     first: 0,
     second: 0,
   },
   winner: null,
   winningCells: null,
+  roundEnd: null,
+  lastMove: null,
   secondsLeft: TURN_DURATION_SECONDS,
 };

@@ -10,6 +10,7 @@ export interface Player {
   label: string;
   icon: PlayerIconCode;
   turnLabel: string;
+  winVerb: 'wins' | 'win';
   theme: PlayerTheme;
 }
 
@@ -22,6 +23,7 @@ const INITIAL_PLAYERS_PVP: GamePlayers = {
     label: 'Player 1',
     icon: 'player-1',
     turnLabel: "Player 1's turn",
+    winVerb: 'wins',
     theme: 'var(--red-500)',
   },
   second: {
@@ -29,6 +31,7 @@ const INITIAL_PLAYERS_PVP: GamePlayers = {
     label: 'Player 2',
     icon: 'player-2',
     turnLabel: "Player 2's turn",
+    winVerb: 'wins',
     theme: 'var(--yellow-500)',
   },
 };
@@ -39,13 +42,15 @@ const INITIAL_PLAYERS_PVCPU: GamePlayers = {
     label: 'You',
     icon: 'you',
     turnLabel: 'Your turn',
+    winVerb: 'win',
     theme: 'var(--red-500)',
   },
   second: {
     type: 'cpu',
     label: 'CPU',
     icon: 'cpu',
-    turnLabel: "Cpu's turn",
+    turnLabel: "CPU's turn",
+    winVerb: 'wins',
     theme: 'var(--yellow-500)',
   },
 };

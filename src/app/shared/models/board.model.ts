@@ -47,5 +47,6 @@ export function findLandingRow(board: Board, column: number) {
 export interface CellData {
   id: string;
   position: CellPosition;
+  player: PlayerCode;
   theme: PlayerTheme;
 }

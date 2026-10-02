@@ -19,7 +19,7 @@ export class OutcomeCard {
   });
   winnerOutcome = computed(() => {
     const winner = this.winner();
-    return winner ? 'Wins' : 'Draw';
+    return winner ? winner.winVerb : 'Draw';
   });
 
   playAgainClicked = output<void>();
