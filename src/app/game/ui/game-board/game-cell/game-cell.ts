@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { CellData, CellPosition, WinCells } from '../../../../shared/models/board.model';
 import { Player } from '../../../../shared/models/player.model';
@@ -8,6 +8,7 @@ import { Player } from '../../../../shared/models/player.model';
   imports: [MatIcon],
   templateUrl: './game-cell.html',
   styleUrl: './game-cell.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.preview]': 'isPreview()',
     '[style.--preview-color]': 'currentPlayer().theme',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MenuItem } from '../../../shared/models/menu-item.model';
 import { MenuItems } from '../../../shared/ui/menu-items/menu-items';
@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   selector: 'app-in-game-menu',
   imports: [MatCardModule, MenuItems],
   templateUrl: './in-game-menu.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './in-game-menu.scss',
 })
 export class InGameMenu {

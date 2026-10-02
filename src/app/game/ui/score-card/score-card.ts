@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { Player } from '../../../shared/models/player.model';
@@ -7,6 +7,7 @@ import { Player } from '../../../shared/models/player.model';
   selector: 'app-score-card',
   imports: [MatCard, MatCardContent, MatIcon],
   templateUrl: './score-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './score-card.scss',
 })
 export class ScoreCard {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Logo } from '../shared/ui/logo/logo';
 import { GameStore } from '../shared/data-access/game-store';
@@ -10,6 +10,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   selector: 'app-main-menu',
   imports: [MatCard, MatCardContent, Logo, MenuItems],
   templateUrl: './main-menu.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './main-menu.scss',
 })
 export class MainMenu {
