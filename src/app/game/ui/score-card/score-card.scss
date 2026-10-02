@@ -1,29 +1,97 @@
 @use '@angular/material' as mat;
+@use 'media' as *;
 
+// Mobile: compact card (142 × 81) with the avatar overlapping its outer side.
+// md: wide card (272 × 100), label and score on one row.
+// Side layout: tall card (141 × 160) with the avatar overlapping its top.
 :host {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: block;
+  position: relative;
 
   .score {
-    min-width: 14.7rem;
-
     @include mat.card-overrides((
       outlined-container-shape: 2rem
     ));
 
     &__icon {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 0;
       width: 5.4rem;
       height: 5.9rem;
-      transform: translateY(50%);
-      z-index: 10;
+      translate: -50% -50%;
     }
 
     &__content {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 4.6rem 0 1.7rem;
+      height: 8.1rem;
+      padding: 0 1rem;
+    }
+
+    &__label {
+      white-space: nowrap;
+    }
+
+    &__value {
+      font-size: 3.2rem;
+      line-height: 4.1rem;
+    }
+  }
+
+  &.score--end .score__icon {
+    left: auto;
+    right: 0;
+    translate: 50% -50%;
+  }
+
+  @include up(md) {
+    .score {
+      &__content {
+        flex-direction: row;
+        justify-content: space-between;
+        height: 10rem;
+        padding: 0 2rem 0 4.4rem;
+      }
+
+      &__label {
+        font-size: 2rem;
+        line-height: 2.6rem;
+      }
+
+      &__value {
+        font-size: 5.6rem;
+        line-height: 7.1rem;
+      }
+    }
+
+    &.score--end .score__content {
+      flex-direction: row-reverse;
+      padding: 0 4.4rem 0 2rem;
+    }
+  }
+
+  @include side-layout {
+    padding-top: 2.7rem;
+
+    &,
+    &.score--end {
+      .score__icon {
+        top: 0;
+        left: 50%;
+        right: auto;
+        translate: -50% 0;
+      }
+
+      .score__content {
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 16rem;
+        padding: 4.6rem 1rem 0;
+      }
     }
   }
 }

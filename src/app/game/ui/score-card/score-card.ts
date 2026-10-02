@@ -9,8 +9,13 @@ import { Player } from '../../../shared/models/player.model';
   templateUrl: './score-card.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './score-card.scss',
+  host: {
+    '[class.score--end]': "side() === 'end'",
+  },
 })
 export class ScoreCard {
   player = input.required<Player>();
   score = input.required<number>();
+  /** Which side of the board the card sits on: the avatar is mirrored for 'end'. */
+  side = input<'start' | 'end'>('start');
 }

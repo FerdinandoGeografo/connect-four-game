@@ -1,9 +1,5 @@
 :host {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translate(-50%, 11rem);
-  z-index: 10;
+  display: block;
 
   .outcome {
     width: 29.1rem;

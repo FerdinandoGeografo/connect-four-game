@@ -33,6 +33,8 @@ export class Game {
     const ref = this.dialog.open<InGameMenu, MenuItem[], never>(InGameMenu, {
       disableClose: false,
       ariaLabelledBy: 'pause-dialog-title',
+      // Lets the menu scroll instead of overflowing on landscape phones.
+      maxHeight: 'calc(100dvh - 2rem)',
       data: [
         {
           styleClass: 'btn--neutral btn--center',

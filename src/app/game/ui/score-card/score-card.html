@@ -1,9 +1,9 @@
 <mat-icon class="score__icon" svgIcon="custom:{{ player().icon }}" />
 <mat-card class="score" appearance="outlined">
   <mat-card-content class="score__content">
-    <p class="heading heading--md">
+    <p class="score__label heading heading--sm">
       {{ player().label }}<span class="cdk-visually-hidden"> score</span>
     </p>
-    <p class="heading heading--xl">{{ score() }}</p>
+    <p class="score__value heading heading--xl">{{ score() }}</p>
   </mat-card-content>
 </mat-card>
