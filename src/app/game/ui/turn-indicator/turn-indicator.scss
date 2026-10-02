@@ -1,3 +1,5 @@
+@use 'media' as *;
+
 :host {
   display: inline-block;
   position: absolute;
@@ -33,6 +35,12 @@
       .heading--xl {
         text-transform: unset;
       }
+    }
+  }
+
+  @include reduced-motion {
+    .turn__icon {
+      animation: none;
     }
   }
 }

@@ -1,3 +1,5 @@
+<h1 class="cdk-visually-hidden">Connect Four</h1>
+
 <app-game-toolbar
   (menuGameClicked)="openGameMenu()"
   (restartGameClicked)="gameStore.restartGame()"
@@ -11,7 +13,7 @@
     [cells]="gameStore.cells()"
     [players]="gameStore.players()"
     [currentPlayer]="gameStore.currentPlayer()"
-    [phase]="gameStore.phase()"
+    [canPlay]="gameStore.canPlay()"
     [playableColumns]="gameStore.playableColumns()"
     [winningCells]="gameStore.winningCells()"
     (discDropped)="gameStore.dropDisc($event)"
@@ -28,6 +30,8 @@
 
   <app-score-card [player]="gameStore.players().second" [score]="gameStore.scores().second" />
 </div>
+
+<p class="cdk-visually-hidden" role="status">{{ gameStore.statusMessage() }}</p>
 
 <div
   class="game__banner"

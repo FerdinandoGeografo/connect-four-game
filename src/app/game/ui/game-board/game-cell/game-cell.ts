@@ -1,36 +1,25 @@
-import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { CellData, CellPosition, WinCells } from '../../../../shared/models/board.model';
-import { Player } from '../../../../shared/models/player.model';
+import { CellData } from '../../../../shared/models/board.model';
 
+/**
+ * A dropped disc. The board renders one per occupied cell, tracked by cell id,
+ * so the drop animation runs once when the disc is created and never restarts
+ * on unrelated state updates.
+ */
 @Component({
   selector: 'app-game-cell',
   imports: [MatIcon],
   templateUrl: './game-cell.html',
-  styleUrl: './game-cell.scss',
   changeDetection: ChangeDetectionStrategy.Eager,
+  styleUrl: './game-cell.scss',
   host: {
-    '[class.preview]': 'isPreview()',
-    '[style.--preview-color]': 'currentPlayer().theme',
+    '[style.--row]': 'cell().position.row',
+    '[style.--col]': 'cell().position.column',
+    '[class.winning]': 'winning()',
   },
 })
 export class GameCell {
-  cells = input.required<CellData[]>();
-  position = input.required<CellPosition>();
-  currentPlayer = input.required<Player>();
-  isPreview = input.required<boolean>();
-  winningCells = input.required<WinCells | null>();
-
-  protected readonly cell = computed(() => {
-    const { row, column } = this.position();
-    const cell = this.cells().find((c) => c.position.row === row && c.position.column === column);
-    if (!cell) return null;
-    return cell;
-  });
-  protected readonly inWinCells = computed(
-    () =>
-      !!this.winningCells()?.find(
-        (c) => c.column === this.cell()?.position.column && c.row === this.cell()?.position.row,
-      ),
-  );
+  cell = input.required<CellData>();
+  winning = input(false);
 }
