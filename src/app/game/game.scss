@@ -1,4 +1,4 @@
-@use '../../../public/scss/media' as *;
+@use 'media' as *;
 
 :host {
   padding: 5rem 0 0;
@@ -28,7 +28,7 @@
     }
   }
 
-  @include respond(tablet) {
+  @include below(lg) {
     padding: 3rem 0 0;
 
     .game {

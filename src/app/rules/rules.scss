@@ -1,4 +1,4 @@
-@use '../../../public/scss/media' as *;
+@use 'media' as *;
 
 :host {
   height: 100vh;
@@ -54,7 +54,7 @@
     }
   }
 
-  @include respond(phone) {
+  @include below(md) {
     padding: 0 2rem;
 
     .rules {
