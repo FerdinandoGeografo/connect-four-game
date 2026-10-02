@@ -22,6 +22,12 @@ export class Game {
   private readonly router = inject(Router);
   protected readonly gameStore = inject(GameStore);
 
+  constructor() {
+    if (this.gameStore.phase() !== 'running') {
+      this.gameStore.startRound();
+    }
+  }
+
   openGameMenu() {
     this.gameStore.pauseGame();
     const ref = this.dialog.open<InGameMenu, MenuItem[], never>(InGameMenu, {

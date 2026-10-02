@@ -5,13 +5,17 @@ import {
   BOARD_COLUMNS,
   BOARD_ROWS,
   CellData,
+  CellPosition,
+  CONNECT_LENGTH,
   createEmptyBoard,
+  findLandingRow,
   TURN_DURATION_SECONDS,
+  WIN_DIRECTIONS,
+  WinCells,
 } from '../models/board.model';
-import { GamePlayers, createPlayers, PlayerCode } from '../models/player.model';
-import { interval } from 'rxjs';
+import { GamePlayers, PlayerCode, ScorePlayers, getPlayersByMode } from '../models/player.model';
+import { delay, exhaustMap, filter, interval, of, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CLOSE_SQUARE_BRACKET } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root',
@@ -25,11 +29,10 @@ export class GameStore {
   readonly board = computed(() => this.state().board);
   readonly currentPlayerCode = computed(() => this.state().currentPlayer);
   readonly currentPlayer = computed(() => this.players()[this.currentPlayerCode()]);
-  readonly currentPlayerThemeVar = computed(() => `var(--${this.currentPlayer().theme}-500)`);
   readonly currentOpponentCode = computed(() =>
     this.currentPlayerCode() === 'first' ? 'second' : 'first',
   );
-
+  readonly scores = computed(() => this.state().scores);
   readonly winner = computed(() => {
     const winnerCode = this.state().winner;
     if (!winnerCode) return null;
@@ -49,8 +52,9 @@ export class GameStore {
   readonly bannerThemeVar = computed(() => {
     const winner = this.winner();
     if (!winner) return 'var(--primary-800)';
-    return `var(--${winner.theme}-500)`;
+    return winner.theme;
   });
+  readonly winningCells = computed(() => this.state().winningCells);
   readonly cells = computed<CellData[]>(() => {
     const board = this.board();
     const players = this.players();
@@ -63,8 +67,10 @@ export class GameStore {
 
         result.push({
           id: `${row}-${col}`,
-          row,
-          column: col,
+          position: {
+            row,
+            column: col,
+          },
           theme: players[cell].theme,
         });
       }
@@ -72,35 +78,49 @@ export class GameStore {
     return result;
   });
 
+  private readonly cpuMove$ = new Subject<void>();
+
   constructor() {
-    effect(() => console.log('[GAME] :\t', this.state()));
+    //effect(() => console.log('[GAME] :\t', this.state()));
+    effect(() => {
+      console.log('Board Changed: ', this.board());
+    });
 
     interval(1000)
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.handleTick());
+
+    this.cpuMove$
+      .pipe(
+        filter(() => this.phase() === 'running' && this.isCpuTurn()),
+        exhaustMap(() => {
+          const column = this.chooseCpuColumn();
+          const thinkMs = 700 + Math.random() * (1500 - 700);
+          console.log('Column chosen: ', column);
+          return of(column).pipe(delay(thinkMs));
+        }),
+        takeUntilDestroyed(),
+      )
+      .subscribe((column) => this.applyDrop(column));
   }
 
   startGame(mode: GameMode) {
     this.patchState({
       mode,
       phase: 'running',
-      players: createPlayers(mode),
+      players: getPlayersByMode(mode),
       board: createEmptyBoard(),
       currentPlayer: 'first',
+      scores: { first: 0, second: 0 },
       winner: null,
+      winningCells: null,
       secondsLeft: TURN_DURATION_SECONDS,
     });
+    this.triggerCpuIfNeeded();
   }
 
   restartGame() {
-    this.patchState({
-      phase: 'running',
-      players: createPlayers(this.mode()),
-      board: createEmptyBoard(),
-      currentPlayer: 'first',
-      winner: null,
-      secondsLeft: TURN_DURATION_SECONDS,
-    });
+    this.startGame(this.mode());
   }
 
   startRound() {
@@ -110,7 +130,9 @@ export class GameStore {
       currentPlayer: this.currentOpponentCode(),
       secondsLeft: TURN_DURATION_SECONDS,
       winner: null,
+      winningCells: null,
     });
+    this.triggerCpuIfNeeded();
   }
 
   pauseGame() {
@@ -121,6 +143,7 @@ export class GameStore {
   resumeGame() {
     if (this.phase() !== 'paused') return;
     this.patchState({ phase: 'running' });
+    this.triggerCpuIfNeeded();
   }
 
   destroyGame() {
@@ -128,14 +151,16 @@ export class GameStore {
   }
 
   dropDisc(column: number) {
-    if (this.phase() === 'running') return;
+    if (this.phase() !== 'running') return;
+    if (this.isCpuTurn()) return;
     if (!this.playableColumns().includes(column)) return;
 
-    console.log('landingRow');
-    const landingRow = this.findLandingRow(column);
-    if (landingRow === -1) return;
+    this.applyDrop(column);
+  }
 
-    console.log('landingRowFounded: ', landingRow);
+  private applyDrop(column: number) {
+    const landingRow = findLandingRow(this.board(), column);
+    if (landingRow === -1) return;
 
     const newBoard = this.board().map((boardRow, rowIndex) =>
       rowIndex !== landingRow
@@ -143,55 +168,131 @@ export class GameStore {
         : boardRow.map((cell, colIndex) => (colIndex === column ? this.currentPlayerCode() : cell)),
     );
 
-    console.log('New Board: ', newBoard);
+    const win = this.checkWin(newBoard, landingRow, column, this.currentPlayerCode());
+    if (win) {
+      this.patchState({
+        board: newBoard,
+        phase: 'round-over',
+        winner: this.currentPlayerCode(),
+        winningCells: win,
+        scores: this.incrementScore(this.currentPlayerCode()),
+      });
+      return;
+    }
+
+    const isDraw = newBoard[0].every((cell) => cell !== null);
+    if (isDraw) {
+      this.patchState({
+        board: newBoard,
+        phase: 'round-over',
+        winner: null,
+        winningCells: null,
+      });
+      return;
+    }
 
     this.patchState({
       board: newBoard,
       currentPlayer: this.currentOpponentCode(),
       secondsLeft: TURN_DURATION_SECONDS,
     });
+    this.triggerCpuIfNeeded();
+  }
+
+  private chooseCpuColumn() {
+    const playableColumns = this.playableColumns();
+    const cpuCode = this.currentPlayerCode();
+    const opponentCode = this.currentOpponentCode();
+
+    const winning = playableColumns.find((col) => this.simulateWin(col, cpuCode));
+    if (winning !== undefined) return winning;
+
+    const blocking = playableColumns.find((col) => this.simulateWin(col, opponentCode));
+    if (blocking !== undefined) return blocking;
+
+    const center = Math.floor(BOARD_COLUMNS / 2);
+    const sorted = [...playableColumns].sort((a, b) => Math.abs(a - center) - Math.abs(b - center));
+    const minDist = Math.abs(sorted[0] - center);
+    const best = sorted.filter((col) => Math.abs(col - center) === minDist);
+    return best[Math.floor(Math.random() * best.length)];
+  }
+
+  private simulateWin(column: number, playerCode: PlayerCode) {
+    const row = findLandingRow(this.board(), column);
+    if (row === -1) return false;
+
+    const simBoard = this.board().map((boardRow, rowIndex) =>
+      rowIndex !== row
+        ? boardRow
+        : boardRow.map((cell, colIndex) => (colIndex !== column ? cell : playerCode)),
+    );
+    return !!this.checkWin(simBoard, row, column, playerCode);
+  }
+
+  private checkWin(
+    board: Board,
+    row: number,
+    col: number,
+    playerCode: PlayerCode,
+  ): WinCells | null {
+    for (const { row: dRow, column: dCol } of WIN_DIRECTIONS) {
+      const forward = this.collect(board, row, col, dRow, dCol, playerCode);
+      const backward = this.collect(board, row, col, -dRow, -dCol, playerCode);
+
+      if (1 + forward.length + backward.length >= CONNECT_LENGTH) {
+        const all = [...backward.reverse(), { row, column: col }, ...forward];
+        return all.slice(0, CONNECT_LENGTH) as WinCells;
+      }
+    }
+    return null;
+  }
+
+  private collect(
+    board: Board,
+    startRow: number,
+    startCol: number,
+    dRow: number,
+    dCol: number,
+    playerCode: PlayerCode,
+  ): CellPosition[] {
+    const cells: CellPosition[] = [];
+    let r = startRow + dRow;
+    let c = startCol + dCol;
+
+    while (r >= 0 && r < BOARD_ROWS && c >= 0 && c < BOARD_COLUMNS && board[r][c] === playerCode) {
+      cells.push({ row: r, column: c });
+      r += dRow;
+      c += dCol;
+    }
+    return cells;
   }
 
   private handleTick() {
     if (this.phase() !== 'running') return;
 
-    const next = this.secondsLeft() - 0;
+    const next = this.secondsLeft() - 1;
     if (next <= 0) {
       this.patchState({
         secondsLeft: 0,
         phase: 'round-over',
         winner: this.currentOpponentCode(),
-        players: {
-          first: {
-            ...this.players().first,
-            score:
-              this.currentPlayerCode() === 'first'
-                ? this.players().first.score
-                : this.players().first.score + 1,
-          },
-          second: {
-            ...this.players().second,
-            score:
-              this.currentPlayerCode() === 'second'
-                ? this.players().second.score
-                : this.players().second.score + 1,
-          },
-        },
+        scores: this.incrementScore(this.currentOpponentCode()),
       });
       return;
     }
 
-    this.patchState({
-      secondsLeft: next,
-    });
+    this.patchState({ secondsLeft: next });
   }
 
-  findLandingRow(column: number) {
-    const board = this.board();
-    for (let row = BOARD_ROWS - 1; row >= 0; row--) {
-      if (board[row][column] === null) return row;
-    }
-    return -1;
+  private incrementScore(winnerCode: PlayerCode) {
+    return {
+      ...this.scores(),
+      [winnerCode]: this.scores()[winnerCode] + 1,
+    };
+  }
+
+  private triggerCpuIfNeeded() {
+    if (this.isCpuTurn()) this.cpuMove$.next();
   }
 
   private patchState(patch: Partial<GameState>) {
@@ -205,16 +306,23 @@ interface GameState {
   players: GamePlayers;
   board: Board;
   currentPlayer: PlayerCode;
+  scores: ScorePlayers;
   winner: PlayerCode | null;
+  winningCells: WinCells | null;
   secondsLeft: number;
 }
 
 const initialState: GameState = {
   mode: 'pvp',
   phase: 'paused',
-  players: createPlayers('pvp'),
+  players: getPlayersByMode('pvp'),
   board: createEmptyBoard(),
   currentPlayer: 'first',
+  scores: {
+    first: 0,
+    second: 0,
+  },
   winner: null,
+  winningCells: null,
   secondsLeft: TURN_DURATION_SECONDS,
 };

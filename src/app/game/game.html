@@ -4,9 +4,18 @@
 />
 
 <div class="game__content">
-  <app-score-card [player]="gameStore.players().first" />
+  <app-score-card [player]="gameStore.players().first" [score]="gameStore.scores().first" />
 
-  <app-game-board />
+  <app-game-board
+    [board]="gameStore.board()"
+    [cells]="gameStore.cells()"
+    [players]="gameStore.players()"
+    [currentPlayer]="gameStore.currentPlayer()"
+    [phase]="gameStore.phase()"
+    [playableColumns]="gameStore.playableColumns()"
+    [winningCells]="gameStore.winningCells()"
+    (discDropped)="gameStore.dropDisc($event)"
+  />
 
   @if (gameStore.isRoundOver()) {
     <app-outcome-card [winner]="gameStore.winner()" (playAgainClicked)="gameStore.startRound()" />
@@ -17,7 +26,7 @@
     />
   }
 
-  <app-score-card [player]="gameStore.players().second" />
+  <app-score-card [player]="gameStore.players().second" [score]="gameStore.scores().second" />
 </div>
 
 <div

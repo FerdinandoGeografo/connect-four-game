@@ -1,16 +1,32 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { GameStore } from '../../../shared/data-access/game-store';
-import { BOARD_COLUMNS, BOARD_ROWS } from '../../../shared/models/board.model';
+import { Component, computed, input, output, signal } from '@angular/core';
+import {
+  Board,
+  BOARD_COLUMNS,
+  BOARD_ROWS,
+  CellData,
+  findLandingRow,
+  WinCells,
+} from '../../../shared/models/board.model';
 import { MatIcon } from '@angular/material/icon';
+import { GamePhase } from '../../../shared/models/game.model';
+import { GamePlayers, Player } from '../../../shared/models/player.model';
+import { GameCell } from './game-cell/game-cell';
 
 @Component({
   selector: 'app-game-board',
-  imports: [MatIcon],
+  imports: [MatIcon, GameCell],
   templateUrl: './game-board.html',
   styleUrl: './game-board.scss',
 })
 export class GameBoard {
-  protected readonly gameStore = inject(GameStore);
+  board = input.required<Board>();
+  cells = input.required<CellData[]>();
+  players = input.required<GamePlayers>();
+  currentPlayer = input.required<Player>();
+  phase = input.required<GamePhase>();
+  playableColumns = input.required<number[]>();
+  winningCells = input<WinCells | null>(null);
+  discDropped = output<number>();
 
   protected readonly columns = Array.from({ length: BOARD_COLUMNS }, (_, i) => i);
   protected readonly rows = Array.from({ length: BOARD_ROWS }, (_, i) => i);
@@ -19,7 +35,7 @@ export class GameBoard {
   protected readonly previewCell = computed(() => {
     const col = this.hoveredColumn();
     if (col === null) return null;
-    const landingRow = this.gameStore.findLandingRow(col);
+    const landingRow = findLandingRow(this.board(), col);
     if (landingRow === -1) return null;
 
     return { row: landingRow, column: col };
@@ -29,25 +45,20 @@ export class GameBoard {
     const CELL_WIDTH = 70;
     const MARKER_WIDTH = 38;
     const GAP = 18;
-    const SPACING = (CELL_WIDTH - MARKER_WIDTH) / 2;
     const PADDING = 17;
-    return PADDING + col * (CELL_WIDTH + GAP) + SPACING;
+    return PADDING + col * (CELL_WIDTH + GAP) + (CELL_WIDTH - MARKER_WIDTH) / 2;
   });
 
-  constructor() {
-    effect(() => console.log('Marker offset changed! :', this.markerLeft()));
-  }
-
   protected onColumnHover(col: number) {
-    if (this.gameStore.phase() !== 'running') return;
-    if (!this.gameStore.playableColumns().includes(col)) return;
+    if (this.phase() !== 'running') return;
+    if (!this.playableColumns().includes(col)) return;
     this.hoveredColumn.set(col);
   }
 
   protected onColumnClick(col: number) {
-    this.gameStore.dropDisc(col);
+    this.discDropped.emit(col);
 
-    if (!this.gameStore.playableColumns().includes(col)) {
+    if (!this.playableColumns().includes(col)) {
       this.hoveredColumn.set(null);
     }
   }
