@@ -1,4 +1,14 @@
-import { Component, computed, input, output, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  input,
+  output,
+  signal,
+  viewChildren,
+} from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 import {
   Board,
   BOARD_COLUMNS,
@@ -7,8 +17,6 @@ import {
   findLandingRow,
   WinCells,
 } from '../../../shared/models/board.model';
-import { MatIcon } from '@angular/material/icon';
-import { GamePhase } from '../../../shared/models/game.model';
 import { GamePlayers, Player } from '../../../shared/models/player.model';
 import { GameCell } from './game-cell/game-cell';
 
@@ -24,43 +32,80 @@ export class GameBoard {
   cells = input.required<CellData[]>();
   players = input.required<GamePlayers>();
   currentPlayer = input.required<Player>();
-  phase = input.required<GamePhase>();
+  /** Whether the local player can drop a disc now (running phase, human turn). */
+  canPlay = input.required<boolean>();
   playableColumns = input.required<number[]>();
   winningCells = input<WinCells | null>(null);
   discDropped = output<number>();
 
   protected readonly columns = Array.from({ length: BOARD_COLUMNS }, (_, i) => i);
-  protected readonly rows = Array.from({ length: BOARD_ROWS }, (_, i) => i);
 
-  protected readonly hoveredColumn = signal<number | null>(0);
+  private readonly columnButtons = viewChildren<ElementRef<HTMLButtonElement>>('columnButton');
+
+  /** Column under the pointer or with keyboard focus; drives marker and preview. */
+  protected readonly activeColumn = signal<number | null>(null);
+  /** Roving tabindex: the board is a single tab stop, arrows move between columns. */
+  protected readonly focusableColumn = signal(Math.floor(BOARD_COLUMNS / 2));
+  protected readonly showMarker = computed(() => {
+    const column = this.activeColumn();
+    return column !== null && this.isColumnEnabled(column);
+  });
   protected readonly previewCell = computed(() => {
-    const col = this.hoveredColumn();
-    if (col === null) return null;
-    const landingRow = findLandingRow(this.board(), col);
-    if (landingRow === -1) return null;
-
-    return { row: landingRow, column: col };
+    const column = this.activeColumn();
+    if (column === null || !this.isColumnEnabled(column)) return null;
+    return { row: findLandingRow(this.board(), column), column };
   });
-  protected readonly markerLeft = computed(() => {
-    const col = this.hoveredColumn() ?? 0;
-    const CELL_WIDTH = 70;
-    const MARKER_WIDTH = 38;
-    const GAP = 18;
-    const PADDING = 17;
-    return PADDING + col * (CELL_WIDTH + GAP) + (CELL_WIDTH - MARKER_WIDTH) / 2;
+  protected readonly columnLabels = computed(() => {
+    const board = this.board();
+    const players = this.players();
+
+    return this.columns.map((column) => {
+      const discs: string[] = [];
+      for (let row = BOARD_ROWS - 1; row >= 0; row--) {
+        const cell = board[row][column];
+        if (cell) discs.push(players[cell].label);
+      }
+      const free = BOARD_ROWS - discs.length;
+      const contents = discs.length ? `${discs.join(', ')} from the bottom` : 'empty';
+      const slots = free ? `${free} ${free === 1 ? 'slot' : 'slots'} free` : 'full';
+      return `Column ${column + 1}: ${contents}, ${slots}`;
+    });
   });
 
-  protected onColumnHover(col: number) {
-    if (this.phase() !== 'running') return;
-    if (!this.playableColumns().includes(col)) return;
-    this.hoveredColumn.set(col);
+  protected isColumnEnabled(column: number) {
+    return this.canPlay() && this.playableColumns().includes(column);
   }
 
-  protected onColumnClick(col: number) {
-    this.discDropped.emit(col);
+  protected isWinning(cell: CellData) {
+    const { row, column } = cell.position;
+    return !!this.winningCells()?.some((c) => c.row === row && c.column === column);
+  }
 
-    if (!this.playableColumns().includes(col)) {
-      this.hoveredColumn.set(null);
-    }
+  protected onColumnClick(column: number) {
+    // Disabled columns stay focusable (aria-disabled), so clicks must be ignored here.
+    if (!this.isColumnEnabled(column)) return;
+    this.discDropped.emit(column);
+  }
+
+  protected onKeydown(event: KeyboardEvent, column: number) {
+    const last = BOARD_COLUMNS - 1;
+    const target =
+      event.key === 'ArrowLeft' ? Math.max(0, column - 1)
+      : event.key === 'ArrowRight' ? Math.min(last, column + 1)
+      : event.key === 'Home' ? 0
+      : event.key === 'End' ? last
+      : null;
+    if (target === null) return;
+
+    event.preventDefault();
+    this.focusableColumn.set(target);
+    this.columnButtons()[target]?.nativeElement.focus();
+  }
+
+  protected onBoardLeave() {
+    const focused = this.columnButtons().findIndex(
+      (button) => button.nativeElement === document.activeElement,
+    );
+    this.activeColumn.set(focused === -1 ? null : focused);
   }
 }

@@ -32,6 +32,7 @@ export class Game {
     this.gameStore.pauseGame();
     const ref = this.dialog.open<InGameMenu, MenuItem[], never>(InGameMenu, {
       disableClose: false,
+      ariaLabelledBy: 'pause-dialog-title',
       data: [
         {
           styleClass: 'btn--neutral btn--center',

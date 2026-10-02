@@ -1,8 +1,1 @@
-@if (cell()) {
-  <mat-icon
-    class="disc"
-    [class.disc--winning]="inWinCells()"
-    svgIcon="custom:counter"
-    [style.--counter-bg]="cell()!.theme"
-  />
-}
+<mat-icon class="disc" svgIcon="custom:counter" [style.--counter-bg]="cell().theme" />

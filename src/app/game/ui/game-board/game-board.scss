@@ -1,68 +1,119 @@
+@use 'media' as *;
+@use 'board-geometry' as geo;
+
+// Stacking order (Figma "Guide"): black layer at the back, discs in between,
+// white layer in the front; the column buttons and the marker sit on top.
 :host {
-  width: 63.2rem;
-  height: 59.4rem;
+  display: block;
   position: relative;
+  width: 100%;
+  aspect-ratio: #{geo.$width} / #{geo.$height};
+  container-type: inline-size;
   z-index: 10;
 
   .board {
-    &__marker {
-      position: absolute;
-      top: -1px;
-      width: 3.8rem;
-      height: 3.6rem;
-      z-index: 10;
-      transform: translateY(-100%);
-      transition: left .15s ease, color .35s, opacity .35s;
-      animation: bounce 1.5s infinite;
-      pointer-events: none;
-
-      &--hidden {
-        opacity: 0;
-      }
-    }
-
     &__layer {
       position: absolute;
       inset: 0;
 
+      &--back {
+        z-index: 1;
+        bottom: auto;
+        height: geo.$back-height-small;
+        background: url('../../../../../public/images/board-layer-black-small.svg') top / 100% 100% no-repeat;
+      }
+
+      &--discs {
+        z-index: 2;
+        overflow: clip;
+        border-radius: #{geo.x(geo.$corner-radius)} / #{geo.y(geo.$corner-radius)};
+        pointer-events: none;
+      }
+
       &--front {
-        z-index: 6;
+        z-index: 3;
+        background: url('../../../../../public/images/board-layer-white-small.svg') top / 100% 100% no-repeat;
         pointer-events: none;
       }
 
       &--columns {
-        z-index: 5;
-        display: flex;
-        gap: 1.8rem;
-        padding: 1.7rem 1.7rem 6.2rem;
-      }
-
-      &--back {
         z-index: 4;
-        pointer-events: none;
       }
+    }
+
+    &__preview {
+      @include geo.at-hole(geo.$hole-size, geo.$hole-size);
+      border-radius: 50%;
+      background-color: var(--preview-color);
+      opacity: 0.3;
     }
 
     &__column {
       all: unset;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(#{geo.x(geo.$hole-centre - geo.$pitch * 0.5)} + var(--col) * #{geo.x(geo.$pitch)});
+      width: geo.x(geo.$pitch);
+      border-radius: 1.2rem;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 1.3rem;
+      -webkit-tap-highlight-color: transparent;
 
-      &:disabled {
-        cursor: not-allowed;
+      &[aria-disabled='true'] {
+        cursor: default;
+      }
+
+      &:focus-visible {
+        outline: 0.3rem solid var(--neutral-900);
+        outline-offset: -0.3rem;
+        box-shadow: inset 0 0 0 0.6rem var(--neutral-0);
+      }
+    }
+
+    &__marker {
+      position: absolute;
+      z-index: 5;
+      top: geo.y(geo.$marker-top);
+      left: calc(#{geo.x(geo.$hole-centre)} + var(--col) * #{geo.x(geo.$pitch)});
+      width: geo.x(geo.$marker-width);
+      height: auto;
+      aspect-ratio: #{geo.$marker-width} / #{geo.$marker-height};
+      translate: -50% 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: left 0.15s ease, color 0.35s, opacity 0.2s;
+
+      &--visible {
+        opacity: 1;
+        animation: marker-bounce 1.5s ease-in-out infinite;
+      }
+    }
+  }
+
+  @container (min-width: #{geo.$large-assets-min-width}) {
+    .board__layer--back {
+      height: geo.$back-height-large;
+      background-image: url('../../../../../public/images/board-layer-black-large.svg');
+    }
+
+    .board__layer--front {
+      background-image: url('../../../../../public/images/board-layer-white-large.svg');
+    }
+  }
+
+  @include reduced-motion {
+    .board__marker {
+      transition: opacity 0.2s;
+
+      &--visible {
+        animation: none;
       }
     }
   }
 }
 
-@keyframes bounce {
+@keyframes marker-bounce {
   50% {
-    transform: translateY(-120%);
-  }
-
-  100% {
-    transform: translateY(-100%);
+    transform: translateY(-25%);
   }
 }

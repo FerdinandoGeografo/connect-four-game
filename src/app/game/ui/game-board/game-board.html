@@ -1,34 +1,49 @@
-<mat-icon
-  class="board__marker"
-  svgIcon="custom:marker"
-  [style.color]="currentPlayer().theme"
-  [style.left.px]="markerLeft()"
-  [class.board__marker--hidden]="hoveredColumn() === null || phase() !== 'running'"
-/>
+<div class="board__layer board__layer--back" aria-hidden="true"></div>
 
-<img class="board__layer board__layer--front" src="images/board-layer-white-large.svg" alt="" />
-
-<div class="board__layer board__layer--columns">
-  @for (col of columns; track col) {
-    <button
-      class="board__column"
-      [disabled]="phase() !== 'running' || !playableColumns().includes(col)"
-      (mouseover)="onColumnHover(col)"
-      (click)="onColumnClick(col)"
-    >
-      @for (row of rows; track row) {
-        <app-game-cell
-          [cells]="cells()"
-          [position]="{ row: row, column: col }"
-          [currentPlayer]="currentPlayer()"
-          [isPreview]="
-            phase() === 'running' && previewCell()?.row === row && previewCell()?.column === col
-          "
-          [winningCells]="winningCells()"
-        />
-      }
-    </button>
+<div class="board__layer board__layer--discs" aria-hidden="true">
+  @if (previewCell(); as preview) {
+    <span
+      class="board__preview"
+      [style.--row]="preview.row"
+      [style.--col]="preview.column"
+      [style.--preview-color]="currentPlayer().theme"
+    ></span>
+  }
+  @for (cell of cells(); track cell.id) {
+    <app-game-cell [cell]="cell" [winning]="isWinning(cell)" />
   }
 </div>
 
-<img class="board__layer board__layer--back" src="images/board-layer-black-large.svg" alt="" />
+<div class="board__layer board__layer--front" aria-hidden="true"></div>
+
+<div
+  class="board__layer board__layer--columns"
+  role="group"
+  aria-label="Game board, 7 columns. Use arrow keys to choose a column and Enter to drop a disc."
+  (pointerleave)="onBoardLeave()"
+>
+  @for (column of columns; track column) {
+    <button
+      #columnButton
+      type="button"
+      class="board__column"
+      [style.--col]="column"
+      [attr.aria-label]="columnLabels()[column]"
+      [attr.aria-disabled]="!isColumnEnabled(column)"
+      [attr.tabindex]="column === focusableColumn() ? 0 : -1"
+      (pointerenter)="activeColumn.set(column)"
+      (focus)="activeColumn.set(column); focusableColumn.set(column)"
+      (blur)="activeColumn.set(null)"
+      (keydown)="onKeydown($event, column)"
+      (click)="onColumnClick(column)"
+    ></button>
+  }
+</div>
+
+<mat-icon
+  class="board__marker"
+  svgIcon="custom:marker"
+  [class.board__marker--visible]="showMarker()"
+  [style.--col]="activeColumn() ?? 3"
+  [style.color]="currentPlayer().theme"
+/>
