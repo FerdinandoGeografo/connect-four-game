@@ -1,9 +1,8 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { GameToolbar } from './ui/game-toolbar/game-toolbar';
 import { ScoreCard } from './ui/score-card/score-card';
 import { TurnIndicator } from './ui/turn-indicator/turn-indicator';
 import { OutcomeCard } from './ui/outcome-card/outcome-card';
-import { MatIcon } from '@angular/material/icon';
 import { GameStore } from '../shared/data-access/game-store';
 import { MatDialog } from '@angular/material/dialog';
 import { InGameMenu } from './ui/in-game-menu/in-game-menu';
@@ -24,9 +23,9 @@ export class Game {
   protected readonly gameStore = inject(GameStore);
 
   constructor() {
-    if (this.gameStore.phase() !== 'running') {
-      this.gameStore.startRound();
-    }
+    // Leaving the route (e.g. browser back) must not keep the turn timer running.
+    inject(DestroyRef).onDestroy(() => this.gameStore.pauseGame());
+    this.gameStore.resumeGame();
   }
 
   openGameMenu() {
@@ -61,5 +60,8 @@ export class Game {
         },
       ],
     });
+
+    // Escape and backdrop clicks close the dialog without choosing an item: resume the game.
+    ref.afterClosed().subscribe(() => this.gameStore.resumeGame());
   }
 }
