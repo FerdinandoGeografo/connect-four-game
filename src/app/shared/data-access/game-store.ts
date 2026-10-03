@@ -1,4 +1,4 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, signal, Service } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMPTY, interval, map, Subject, switchMap, timer } from 'rxjs';
 import { GameMode, GamePhase, RoundEnd } from '../models/game.model';
@@ -25,9 +25,7 @@ import {
 const CPU_THINK_MIN_MS = 1250;
 const CPU_THINK_MAX_MS = 2500;
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class GameStore {
   private readonly state = signal<GameState>(initialState);
 
