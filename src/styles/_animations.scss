@@ -1,0 +1,67 @@
+@use 'media' as *;
+@use 'motion';
+
+// Global keyframes used through the `motion.enter()` / `motion.leave()` mixins.
+// Translations read `--enter-x` / `--enter-y` so each element can choose its
+// direction and distance. `pop-*` animate the individual `scale` property, so
+// they compose with elements positioned through `translate` or `transform`.
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--enter-x, 0), var(--enter-y, 2rem));
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  70% {
+    scale: 1.04;
+  }
+}
+
+@keyframes pop-out {
+  to {
+    opacity: 0;
+    scale: 0.7;
+  }
+}
+
+// Route transitions (router `withViewTransitions()`): quick cross-fade of the
+// page, while the logo moves between the main menu and the game toolbar.
+::view-transition-old(root) {
+  animation: fade-out 0.18s motion.$ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.3s motion.$ease-out 0.08s both;
+}
+
+::view-transition-group(logo) {
+  animation-duration: 0.5s;
+  animation-timing-function: motion.$ease-out;
+}
+
+@include reduced-motion {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

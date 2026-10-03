@@ -39,8 +39,9 @@ export class GameStore {
   readonly currentPlayer = computed(() => this.players()[this.currentPlayerCode()]);
   readonly currentOpponentCode = computed(() => getOpponent(this.currentPlayerCode()));
   readonly scores = computed(() => this.state().scores);
+  readonly winnerCode = computed(() => this.state().winner);
   readonly winner = computed(() => {
-    const winnerCode = this.state().winner;
+    const winnerCode = this.winnerCode();
     if (!winnerCode) return null;
     return this.players()[winnerCode];
   });
@@ -51,11 +52,6 @@ export class GameStore {
   /** True when the local player may drop a disc right now. */
   readonly canPlay = computed(() => this.phase() === 'running' && !this.isCpuTurn());
   readonly playableColumns = computed(() => getPlayableColumns(this.board()));
-  readonly bannerThemeVar = computed(() => {
-    const winner = this.winner();
-    if (!winner) return 'var(--primary-800)';
-    return winner.theme;
-  });
   readonly winningCells = computed(() => this.state().winningCells);
   readonly cells = computed<CellData[]>(() => {
     const board = this.board();

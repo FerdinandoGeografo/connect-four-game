@@ -16,10 +16,12 @@ import { CellData } from '../../../../shared/models/board.model';
   host: {
     '[style.--row]': 'cell().position.row',
     '[style.--col]': 'cell().position.column',
-    '[class.winning]': 'winning()',
+    '[class.winning]': 'winIndex() !== null',
+    '[style.--win-index]': 'winIndex()',
   },
 })
 export class GameCell {
   cell = input.required<CellData>();
-  winning = input(false);
+  /** Position in the winning line (0-3), or null when the disc is not part of it. */
+  winIndex = input<number | null>(null);
 }

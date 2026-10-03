@@ -1,4 +1,5 @@
 @use 'media' as *;
+@use 'motion';
 
 // Mobile: no card, logo and buttons straight on the light purple background.
 // md+: 480px card on the dark purple background.
@@ -10,6 +11,8 @@
   justify-content: center;
 
   .menu {
+    --enter-y: 3rem;
+    @include motion.enter(rise-in, 0s, 0.5s);
     max-width: 48rem;
     flex: 1;
     background: transparent;

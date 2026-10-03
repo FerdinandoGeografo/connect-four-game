@@ -16,10 +16,20 @@ $disc-width: 70;
 $disc-height: 75;
 $disc-centre: 35;
 
-// `marker` icon: 38 × 36, its top sits 9.5px above the board edge in the frames.
+// `marker` icon: 38 × 36; its tip is at y ≈ 30. In the frames the marker top
+// sits 9.5px above the board edge (tip 18px into the frame); here it is raised
+// so the tip rests on the edge and the bounce stays clear of the holes.
 $marker-width: 38;
 $marker-height: 36;
-$marker-top: -9.5;
+$marker-top: -30;
+// Distance (in marker heights) the marker travels upward while hiding.
+$marker-hide-offset: -70%;
+
+// Focus pill around a column of holes: 12px above the first hole, 12px below
+// the last one (holes span 20 → 524), 6px on each side of the 64px holes.
+$focus-inset-top: 12;
+$focus-inset-bottom: $height - 532;
+$focus-inset-x: math.percentage(math.div(($pitch - $hole-size) * 0.5 - 6, $pitch));
 
 // The small black layer (335 × 320) and the large one (632 × 594) are taller
 // than the white layer because of their drop shadow.

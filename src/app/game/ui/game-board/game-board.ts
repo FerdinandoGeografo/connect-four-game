@@ -4,6 +4,7 @@ import {
   computed,
   ElementRef,
   input,
+  linkedSignal,
   output,
   signal,
   viewChildren,
@@ -26,6 +27,9 @@ import { GameCell } from './game-cell/game-cell';
   templateUrl: './game-board.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game-board.scss',
+  host: {
+    '[class.board--won]': '!!winningCells()',
+  },
 })
 export class GameBoard {
   board = input.required<Board>();
@@ -46,6 +50,11 @@ export class GameBoard {
   protected readonly activeColumn = signal<number | null>(null);
   /** Roving tabindex: the board is a single tab stop, arrows move between columns. */
   protected readonly focusableColumn = signal(Math.floor(BOARD_COLUMNS / 2));
+  /** Last active column: the marker hides in place instead of sliding back to a default. */
+  protected readonly markerColumn = linkedSignal<number | null, number>({
+    source: this.activeColumn,
+    computation: (column, previous) => column ?? previous?.value ?? Math.floor(BOARD_COLUMNS / 2),
+  });
   protected readonly showMarker = computed(() => {
     const column = this.activeColumn();
     return column !== null && this.isColumnEnabled(column);
@@ -76,9 +85,11 @@ export class GameBoard {
     return this.canPlay() && this.playableColumns().includes(column);
   }
 
-  protected isWinning(cell: CellData) {
+  /** Position of the disc in the winning line (0-3), used to stagger its highlight; null otherwise. */
+  protected winIndex(cell: CellData) {
     const { row, column } = cell.position;
-    return !!this.winningCells()?.some((c) => c.row === row && c.column === column);
+    const index = this.winningCells()?.findIndex((c) => c.row === row && c.column === column) ?? -1;
+    return index === -1 ? null : index;
   }
 
   protected onColumnClick(column: number) {

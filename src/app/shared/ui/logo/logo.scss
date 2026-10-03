@@ -1,5 +1,7 @@
 :host {
   display: inline-block;
+  // Shared element of the route view transition (main menu <-> game toolbar).
+  view-transition-name: logo;
   height: 6.1rem;
   width: 5.8rem;
 

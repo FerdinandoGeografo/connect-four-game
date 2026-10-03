@@ -10,7 +10,7 @@
     ></span>
   }
   @for (cell of cells(); track cell.id) {
-    <app-game-cell [cell]="cell" [winning]="isWinning(cell)" />
+    <app-game-cell [cell]="cell" [winIndex]="winIndex(cell)" />
   }
 </div>
 
@@ -18,6 +18,7 @@
 
 <div
   class="board__layer board__layer--columns"
+  [style.--focus-color]="currentPlayer().theme"
   role="group"
   aria-label="Game board, 7 columns. Use arrow keys to choose a column and Enter to drop a disc."
   (pointerleave)="onBoardLeave()"
@@ -44,6 +45,6 @@
   class="board__marker"
   svgIcon="custom:marker"
   [class.board__marker--visible]="showMarker()"
-  [style.--col]="activeColumn() ?? 3"
+  [style.--col]="markerColumn()"
   [style.color]="currentPlayer().theme"
 />
