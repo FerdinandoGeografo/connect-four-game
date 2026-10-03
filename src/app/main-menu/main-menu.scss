@@ -13,10 +13,10 @@
   .menu {
     --enter-y: 3rem;
     @include motion.enter(rise-in, 0s, 0.5s);
-    max-width: 48rem;
+    max-width: 48.6rem;
     flex: 1;
     background: transparent;
-    border: none;
+    border: 3px solid transparent;
     box-shadow: none;
 
     &__content {
@@ -33,7 +33,7 @@
 
     .menu {
       background: var(--primary-600);
-      border: 3px solid var(--neutral-900);
+      border-color: var(--neutral-900);
       box-shadow: 0 1rem 0 0 var(--neutral-900);
 
       &__content {

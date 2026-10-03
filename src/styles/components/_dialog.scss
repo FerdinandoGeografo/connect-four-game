@@ -8,9 +8,9 @@ html {
   @include mat.dialog-overrides((
     container-color: var(--primary-600),
     container-shape: 4rem,
-    container-max-width: 48rem,
-    container-small-max-width: calc(100% - 4rem),
-    container-min-width: min(48rem, calc(100vw - 4rem)),
+    container-max-width: 48.6rem,
+    container-small-max-width: calc(100% - 3.4rem),
+    container-min-width: min(48.6rem, calc(100vw - 3.4rem)),
   ));
 
   .cdk-overlay-backdrop {

@@ -2,8 +2,6 @@
 @use 'board-geometry' as geo;
 @use 'motion';
 
-// Stacking order (Figma "Guide"): black layer at the back, discs in between,
-// white layer in the front; the column buttons and the marker sit on top.
 :host {
   display: block;
   position: relative;
@@ -64,9 +62,6 @@
         cursor: default;
       }
 
-      // Focus indicator: a pill around the column of holes with a black stroke
-      // and white halo (readable on the white frame and on the purple holes),
-      // tinted with the current player's colour.
       &::after {
         content: '';
         position: absolute;
@@ -107,7 +102,6 @@
       width: geo.x(geo.$marker-width);
       height: auto;
       aspect-ratio: #{geo.$marker-width} / #{geo.$marker-height};
-      // Hidden state: lifted and transparent, so it leaves (and comes back) from above.
       translate: -50% geo.$marker-hide-offset;
       opacity: 0;
       pointer-events: none;
