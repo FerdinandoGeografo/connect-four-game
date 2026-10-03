@@ -4,6 +4,10 @@
 // not the frame widths (375 / 768 / 1440 px). Values are in em because media
 // queries ignore the 10px root font size (1em = 16px).
 //
+// - xs (300px): below it the compact score card cannot fit label and side avatar;
+//   the avatar moves on top, as in the desktop card.
+// - sm (360px): below it (narrow phones, or larger default font sizes, since
+//   em queries follow them) the compact layout loosens its fixed widths.
 // - md (600px): the compact layout (142 × 81 score cards, 40px logo, 15px
 //   overlap of the turn indicator) gives way to the wide one (two 272px score
 //   cards with overlapping avatars ≈ 640px, 52px logo, 40px overlap). The
@@ -11,6 +15,8 @@
 // - lg (1100px): the score cards fit beside the board
 //   (2 × 141px cards + 2 × 60px gaps + 632px board ≈ 1034px, plus gutters).
 $breakpoints: (
+  xs: 18.75em,
+  sm: 22.5em,
   md: 37.5em,
   lg: 68.75em,
 );

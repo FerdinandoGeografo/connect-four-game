@@ -25,6 +25,29 @@
     }
   }
 
+  @include below(sm) {
+    --mat-button-filled-horizontal-padding: 1.2rem;
+
+    button {
+      min-width: 0;
+    }
+  }
+
+  // Too narrow for buttons and logo on one row: the logo goes on top.
+  @include below(xs) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      'logo logo'
+      'menu restart';
+    row-gap: 1.6rem;
+    height: auto;
+
+    app-logo {
+      grid-area: logo;
+      justify-self: center;
+    }
+  }
+
   @include up(md) {
     height: 5.2rem;
 
@@ -32,8 +55,8 @@
       --logo-size: 5.2rem;
     }
 
-    button {
-      min-width: 0;
+    button:first-child {
+      min-width: 8.6rem;
     }
   }
 }

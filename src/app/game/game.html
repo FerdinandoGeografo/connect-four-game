@@ -1,9 +1,9 @@
-<h1 class="cdk-visually-hidden">Connect Four</h1>
+<h1 class="cdk-visually-hidden" tabindex="-1">Connect Four game</h1>
 
 <app-game-toolbar
   class="game__toolbar"
-  (menuGameClicked)="openGameMenu()"
-  (restartGameClicked)="gameStore.restartGame()"
+  (menuClicked)="openGameMenu()"
+  (restartClicked)="gameStore.restartGame()"
 />
 
 <div class="game__content">

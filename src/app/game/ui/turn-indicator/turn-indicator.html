@@ -1,7 +1,8 @@
 <mat-icon class="turn__icon" svgIcon="custom:turn-bg" [style.color]="currentPlayer().theme" />
-<div class="turn__content" [style.--turn-color]="textColor()">
-  <p class="heading heading--sm">
-    {{ currentPlayer().turnLabel }}
+<div class="turn__content" [style.--turn-color]="currentPlayer().themeText">
+  <p class="heading heading--sm">{{ currentPlayer().turnLabel }}</p>
+  <p class="heading heading--xl" role="timer">
+    {{ time() }}<span aria-hidden="true">s</span
+    ><span class="cdk-visually-hidden"> seconds left</span>
   </p>
-  <p class="heading heading--xl" role="timer">{{ time() }}s</p>
 </div>

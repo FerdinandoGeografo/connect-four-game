@@ -1,8 +1,9 @@
+import { DOCUMENT } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
+  inject,
   input,
   linkedSignal,
   output,
@@ -25,7 +26,6 @@ import { GameCell } from './game-cell/game-cell';
   selector: 'app-game-board',
   imports: [MatIcon, GameCell],
   templateUrl: './game-board.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game-board.scss',
   host: {
     '[class.board--won]': '!!winningCells()',
@@ -44,6 +44,7 @@ export class GameBoard {
 
   protected readonly columns = Array.from({ length: BOARD_COLUMNS }, (_, i) => i);
 
+  private readonly document = inject(DOCUMENT);
   private readonly columnButtons = viewChildren<ElementRef<HTMLButtonElement>>('columnButton');
 
   /** Column under the pointer or with keyboard focus; drives marker and preview. */
@@ -99,13 +100,7 @@ export class GameBoard {
   }
 
   protected onKeydown(event: KeyboardEvent, column: number) {
-    const last = BOARD_COLUMNS - 1;
-    const target =
-      event.key === 'ArrowLeft' ? Math.max(0, column - 1)
-      : event.key === 'ArrowRight' ? Math.min(last, column + 1)
-      : event.key === 'Home' ? 0
-      : event.key === 'End' ? last
-      : null;
+    const target = this.keyboardTarget(event.key, column);
     if (target === null) return;
 
     event.preventDefault();
@@ -115,8 +110,23 @@ export class GameBoard {
 
   protected onBoardLeave() {
     const focused = this.columnButtons().findIndex(
-      (button) => button.nativeElement === document.activeElement,
+      (button) => button.nativeElement === this.document.activeElement,
     );
     this.activeColumn.set(focused === -1 ? null : focused);
+  }
+
+  private keyboardTarget(key: string, column: number): number | null {
+    switch (key) {
+      case 'ArrowLeft':
+        return Math.max(0, column - 1);
+      case 'ArrowRight':
+        return Math.min(BOARD_COLUMNS - 1, column + 1);
+      case 'Home':
+        return 0;
+      case 'End':
+        return BOARD_COLUMNS - 1;
+      default:
+        return null;
+    }
   }
 }

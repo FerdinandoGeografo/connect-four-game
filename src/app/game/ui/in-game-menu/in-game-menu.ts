@@ -1,16 +1,38 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { Component, inject } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MenuItem } from '../../../shared/models/menu-item.model';
 import { MenuItems } from '../../../shared/ui/menu-items/menu-items';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export type PauseAction = 'continue' | 'restart' | 'quit';
 
 @Component({
   selector: 'app-in-game-menu',
-  imports: [MatCardModule, MenuItems],
+  imports: [MenuItems],
   templateUrl: './in-game-menu.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './in-game-menu.scss',
 })
 export class InGameMenu {
-  items = inject<MenuItem[]>(MAT_DIALOG_DATA);
+  private readonly dialogRef = inject<MatDialogRef<InGameMenu, PauseAction>>(MatDialogRef);
+
+  protected readonly items: MenuItem[] = [
+    {
+      styleClass: 'btn--neutral btn--center',
+      label: 'Continue game',
+      onClick: () => this.close('continue'),
+    },
+    {
+      styleClass: 'btn--neutral btn--center',
+      label: 'Restart',
+      onClick: () => this.close('restart'),
+    },
+    {
+      styleClass: 'btn--primary btn--center',
+      label: 'Quit game',
+      onClick: () => this.close('quit'),
+    },
+  ];
+
+  private close(action: PauseAction) {
+    this.dialogRef.close(action);
+  }
 }

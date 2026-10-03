@@ -134,7 +134,7 @@
           </g>
       </g>
   </symbol>
-  <symbol id="turn-bg" width="197" height="165" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <symbol id="turn-bg" width="197" height="165" viewBox="0 0 197 165" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <filter x="-4.2%" y="-4.2%" width="108.4%" height="116.2%" filterUnits="objectBoundingBox" id="a">
         <feMorphology radius="3" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"/>

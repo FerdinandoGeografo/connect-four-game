@@ -1,4 +1,4 @@
-@for (item of items(); track $index) {
+@for (item of items(); track item.label) {
   <button
     class="btn {{ item.styleClass ?? 'btn--primary' }}"
     matButton="filled"
