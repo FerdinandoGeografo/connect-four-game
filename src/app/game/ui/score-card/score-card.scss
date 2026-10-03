@@ -49,6 +49,15 @@
   }
 
   @include up(md) {
+    // Tablet frame: the avatar circle (not its shadow) is centred on the card.
+    .score__icon {
+      translate: -50% -2.7rem;
+    }
+
+    &.score--end .score__icon {
+      translate: 50% -2.7rem;
+    }
+
     .score {
       &__content {
         flex-direction: row;
@@ -63,14 +72,16 @@
       }
 
       &__value {
+        min-width: 10.2rem;
         font-size: 5.6rem;
         line-height: 7.1rem;
+        text-align: center;
       }
     }
 
     &.score--end .score__content {
       flex-direction: row-reverse;
-      padding: 0 4.4rem 0 2rem;
+      padding: 0 4.3rem 0 2rem;
     }
   }
 

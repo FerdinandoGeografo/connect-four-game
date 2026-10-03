@@ -7,11 +7,13 @@
     transition: all .35s ease-in-out;
     border: 3px solid var(--state-color);
     box-shadow: 0 1rem 0 0 var(--state-color);
+    // Outside stroke, as in Figma: the layout box is the 72px rectangle.
+    margin: -0.3rem;
   }
 
   @include mat.button-overrides((
     filled-container-shape: 2rem,
-    filled-horizontal-padding: 1.85rem,
+    filled-horizontal-padding: 2rem,
     filled-touch-target-size: 7.8rem,
     filled-focus-state-layer-opacity: 0,
     filled-hover-state-layer-opacity: 0,
@@ -24,9 +26,9 @@
   ));
 
   @include mat.icon-button-overrides((
-    icon-size: 7.8rem,
-    touch-target-size: 7.8rem,
-    state-layer-size: 7.8rem,
+    icon-size: 6.4rem,
+    touch-target-size: 6.4rem,
+    state-layer-size: 6.4rem,
   ));
 
   &:not(.mat-icon) {
@@ -39,6 +41,7 @@
 
   &:has(.mat-icon) {
     justify-content: space-between;
+    padding-right: 1.7rem;
 
     .mat-icon {
       width: 8.2rem;
@@ -99,6 +102,7 @@
     &.mdc-button {
       box-shadow: none;
       border: none;
+      margin: 0;
     }
 
     @include mat.button-overrides((
@@ -109,11 +113,15 @@
     ));
   }
 
+  // 64px circle; the 70 × 75 icon adds the stroke and the shadow around it.
   &.mdc-icon-button {
     --state-color: var(--neutral-900);
+    display: block;
+
     .mat-icon {
-      width: var(--mat-icon-button-state-layer-size);
-      height: var(--mat-icon-button-state-layer-size);
+      width: 7rem;
+      height: 7.5rem;
+      margin: -0.3rem;
     }
   }
 }

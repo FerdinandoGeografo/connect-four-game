@@ -1,17 +1,15 @@
 @use 'media' as *;
 @use 'motion';
 
-// Vertical measures from the Figma frames (mobile / tablet / desktop).
-// --chrome-top: space above the board (padding, toolbar, score cards, gaps);
-// --chrome-bottom: space the turn indicator / outcome card needs below it.
-// The board shrinks with the viewport height so the whole game stays visible,
-// but never below --board-min (short screens scroll instead).
 :host {
   --board-ratio: calc(632 / 584);
   --board-min: 28rem;
-  --chrome-top: 27.7rem;
+  --chrome-top: 27.1rem;
   --chrome-bottom: 17rem;
-  --indicator-overlap: 1.5rem;
+  // Overlaps on the board, measured on the Figma shapes. The turn indicator
+  // SVG starts 2px above its shape (stroke), so it needs 2px more.
+  --outcome-overlap: 1.5rem;
+  --indicator-overlap: 1.7rem;
   --banner-overlap: 0.5rem;
 
   position: relative;
@@ -40,7 +38,6 @@
       width: min(100%, 63.2rem);
     }
 
-    // Inset so the avatars overlapping the outer side stay aligned with the board edge.
     &__score {
       position: relative;
       z-index: 1;
@@ -56,7 +53,7 @@
       &--second {
         --enter-x: 4rem;
         grid-area: second;
-        margin-right: 1.6rem;
+        margin-right: 1.4rem;
       }
 
       &--first,
@@ -87,12 +84,14 @@
         z-index: 10;
         top: 100%;
         left: 50%;
+        translate: -50% calc(-1 * var(--outcome-overlap));
+      }
+
+      app-turn-indicator {
         translate: -50% calc(-1 * var(--indicator-overlap));
       }
     }
 
-    // Anchored to the board and clipped by the host, so it always reaches the
-    // bottom of the page without covering the content when the page scrolls.
     &__banner {
       position: absolute;
       z-index: 0;
@@ -112,8 +111,6 @@
       background-color: var(--primary-800);
     }
 
-    // The new colour starts just below the visible part of the banner and
-    // covers the previous one, which stays underneath until it is hidden.
     &__banner-enter {
       animation: banner-rise 0.6s motion.$ease-out 0.35s both;
 
@@ -131,9 +128,6 @@
       }
     }
 
-    // Classes applied by `animate.enter` / `animate.leave` when the turn
-    // indicator and the outcome card swap. The outcome waits for the winning
-    // disc to land; the indicator waits for the outcome card to leave.
     &__turn-enter {
       @include motion.enter(pop-in, 0.2s, 0.4s);
     }
@@ -150,7 +144,8 @@
   @include up(md) {
     --chrome-top: 24.6rem;
     --chrome-bottom: 16rem;
-    --indicator-overlap: 4rem;
+    --outcome-overlap: 4rem;
+    --indicator-overlap: 4.2rem;
     --banner-overlap: 4rem;
 
     gap: 3.2rem;
@@ -168,7 +163,7 @@
         }
 
         &--second {
-          margin-right: 2.3rem;
+          margin-right: 2.4rem;
         }
       }
     }
@@ -183,27 +178,31 @@
 
     .game {
       &__content {
-        grid-template-columns: 14.1rem auto 14.1rem;
-        grid-template-areas: 'first board second';
-        align-items: center;
-        column-gap: 6rem;
-        width: auto;
-      }
-
-      &__score {
-        &--first,
-        &--second {
-          margin-inline: 0;
-        }
-      }
-
-      &__board {
         // In a grid track sized by content, a percentage width would collapse.
-        width: min(
+        --board-width: min(
           calc(100vw - 2 * (14.1rem + 6rem + 2rem)),
           63.2rem,
           max(var(--board-min), calc((100dvh - var(--chrome-top) - var(--chrome-bottom)) * var(--board-ratio)))
         );
+
+        grid-template-columns: 14.1rem auto 14.1rem;
+        grid-template-areas: 'first board second';
+        align-items: start;
+        column-gap: 6rem;
+        width: auto;
+      }
+
+      // Figma: the avatar top is 168px below the board top (scaled with the board).
+      &__score {
+        &--first,
+        &--second {
+          margin-inline: 0;
+          margin-top: calc(var(--board-width) * 168 / 632);
+        }
+      }
+
+      &__board {
+        width: var(--board-width);
       }
     }
   }
