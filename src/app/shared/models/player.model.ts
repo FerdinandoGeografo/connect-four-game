@@ -4,6 +4,7 @@ export type PlayerCode = 'first' | 'second';
 export type PlayerIconCode = 'player-1' | 'player-2' | 'cpu' | 'you';
 export type PlayerType = 'human' | 'cpu';
 export type PlayerTheme = 'var(--red-500)' | 'var(--yellow-500)';
+export type PlayerThemeText = 'var(--neutral-0)' | 'var(--neutral-900)';
 
 export interface Player {
   type: PlayerType;
@@ -12,6 +13,8 @@ export interface Player {
   turnLabel: string;
   winVerb: 'wins' | 'win';
   theme: PlayerTheme;
+  /** Text colour readable on `theme`. */
+  themeText: PlayerThemeText;
 }
 
 export type GamePlayers = Record<PlayerCode, Player>;
@@ -25,6 +28,7 @@ const INITIAL_PLAYERS_PVP: GamePlayers = {
     turnLabel: "Player 1's turn",
     winVerb: 'wins',
     theme: 'var(--red-500)',
+    themeText: 'var(--neutral-0)',
   },
   second: {
     type: 'human',
@@ -33,6 +37,7 @@ const INITIAL_PLAYERS_PVP: GamePlayers = {
     turnLabel: "Player 2's turn",
     winVerb: 'wins',
     theme: 'var(--yellow-500)',
+    themeText: 'var(--neutral-900)',
   },
 };
 
@@ -44,6 +49,7 @@ const INITIAL_PLAYERS_PVCPU: GamePlayers = {
     turnLabel: 'Your turn',
     winVerb: 'win',
     theme: 'var(--red-500)',
+    themeText: 'var(--neutral-0)',
   },
   second: {
     type: 'cpu',
@@ -52,6 +58,7 @@ const INITIAL_PLAYERS_PVCPU: GamePlayers = {
     turnLabel: "CPU's turn",
     winVerb: 'wins',
     theme: 'var(--yellow-500)',
+    themeText: 'var(--neutral-900)',
   },
 };
 

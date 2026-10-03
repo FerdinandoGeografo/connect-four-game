@@ -1,6 +1,6 @@
 <mat-card class="rules" appearance="outlined">
   <mat-card-content class="rules__content">
-    <h1 class="heading heading--xl">Rules</h1>
+    <h1 class="heading heading--xl" tabindex="-1">Rules</h1>
 
     <div class="rules__item">
       <h2 class="rules__title heading heading--md">Objective</h2>
@@ -12,14 +12,15 @@
 
     <div class="rules__item">
       <h2 class="rules__title heading heading--md">How to play</h2>
-      <ul class="rules__list text">
-        @for (rule of rules; track $index) {
+      <!-- role="list" keeps the list semantics in Safari despite list-style: none. -->
+      <ol class="rules__list text" role="list">
+        @for (rule of rules; track rule) {
           <li>
-            <span>{{ $index + 1 }}</span>
-            <p>{{ rule }}</p>
+            <span class="rules__number" aria-hidden="true">{{ $index + 1 }}</span>
+            <p class="rules__rule">{{ rule }}</p>
           </li>
         }
-      </ul>
+      </ol>
     </div>
   </mat-card-content>
 </mat-card>

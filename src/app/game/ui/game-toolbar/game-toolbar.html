@@ -1,7 +1,12 @@
-<button class="btn btn--tertiary btn--small" matButton="filled" aria-haspopup="dialog" (click)="menuGameClicked.emit()">
+<button
+  class="btn btn--tertiary btn--small"
+  matButton="filled"
+  aria-haspopup="dialog"
+  (click)="menuClicked.emit()"
+>
   Menu
 </button>
 <app-logo />
-<button class="btn btn--tertiary btn--small" matButton="filled" (click)="restartGameClicked.emit()">
+<button class="btn btn--tertiary btn--small" matButton="filled" (click)="restartClicked.emit()">
   Restart
 </button>

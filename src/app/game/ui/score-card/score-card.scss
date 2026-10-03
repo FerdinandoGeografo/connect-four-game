@@ -37,6 +37,7 @@
     }
 
     &__value {
+      margin-top: 0.1rem;
       font-size: 3.2rem;
       line-height: 4.1rem;
     }
@@ -46,6 +47,36 @@
     left: auto;
     right: 0;
     translate: 50% -50%;
+  }
+
+  // Narrow cards: centre the text in the part not covered by the avatar.
+  @include below(sm) {
+    .score__content {
+      padding-left: 2.7rem;
+    }
+
+    &.score--end .score__content {
+      padding: 0 2.7rem 0 1rem;
+    }
+  }
+
+  @include below(xs) {
+    padding-top: 2.7rem;
+
+    &,
+    &.score--end {
+      .score__icon {
+        top: 0;
+        left: 50%;
+        right: auto;
+        translate: -50% 0;
+      }
+
+      .score__content {
+        height: auto;
+        padding: 3.6rem 0.5rem 1rem;
+      }
+    }
   }
 
   @include up(md) {
@@ -67,11 +98,14 @@
       }
 
       &__label {
+        min-width: 8.6rem;
         font-size: 2rem;
         line-height: 2.6rem;
+        text-align: center;
       }
 
       &__value {
+        margin-top: 0;
         min-width: 10.2rem;
         font-size: 5.6rem;
         line-height: 7.1rem;
@@ -81,7 +115,7 @@
 
     &.score--end .score__content {
       flex-direction: row-reverse;
-      padding: 0 4.3rem 0 2rem;
+      padding: 0 4.4rem 0 2rem;
     }
   }
 

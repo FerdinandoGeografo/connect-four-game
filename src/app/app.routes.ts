@@ -1,27 +1,30 @@
 import { inject } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { CanActivateFn, Router, Routes } from '@angular/router';
 import { GameStore } from './shared/data-access/game-store';
+
+/** A game can only be entered after choosing a mode from the main menu. */
+const gameStartedGuard: CanActivateFn = () =>
+  inject(GameStore).phase() !== 'idle' || inject(Router).createUrlTree(['/main-menu']);
 
 export const routes: Routes = [
   {
     path: 'main-menu',
+    title: 'Main menu | Connect Four',
     loadComponent: () => import('./main-menu/main-menu').then((c) => c.MainMenu),
   },
   {
     path: 'game',
-    // A game can only be entered after choosing a mode from the main menu.
-    canActivate: [
-      () => inject(GameStore).phase() !== 'idle' || inject(Router).createUrlTree(['/main-menu']),
-    ],
+    title: 'Game | Connect Four',
+    canActivate: [gameStartedGuard],
     loadComponent: () => import('./game/game').then((c) => c.Game),
   },
   {
     path: 'rules',
+    title: 'Rules | Connect Four',
     loadComponent: () => import('./rules/rules').then((c) => c.Rules),
   },
   {
     path: '**',
-    pathMatch: 'full',
     redirectTo: 'main-menu',
   },
 ];

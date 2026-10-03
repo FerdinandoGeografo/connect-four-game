@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { CellData } from '../../../../shared/models/board.model';
 
@@ -11,7 +11,6 @@ import { CellData } from '../../../../shared/models/board.model';
   selector: 'app-game-cell',
   imports: [MatIcon],
   templateUrl: './game-cell.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game-cell.scss',
   host: {
     '[style.--row]': 'cell().position.row',

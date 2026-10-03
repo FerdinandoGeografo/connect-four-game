@@ -3,12 +3,22 @@
 .btn {
   &.mdc-button {
     --state-color: var(--neutral-900);
+    justify-content: start;
     text-transform: uppercase;
-    transition: all .35s ease-in-out;
+    transition:
+      border-color 0.35s ease-in-out,
+      box-shadow 0.35s ease-in-out,
+      background-color 0.35s ease-in-out;
     border: 3px solid var(--state-color);
     box-shadow: 0 1rem 0 0 var(--state-color);
     // Outside stroke, as in Figma: the layout box is the 72px rectangle.
     margin: -0.3rem;
+  }
+
+  // Keyboard focus ring; white on the purple surfaces, overridden on white cards.
+  &:focus-visible {
+    outline: 0.3rem solid var(--focus-ring, var(--neutral-0));
+    outline-offset: 0.3rem;
   }
 
   @include mat.button-overrides((
@@ -31,10 +41,6 @@
     state-layer-size: 6.4rem,
   ));
 
-  &:not(.mat-icon) {
-    justify-content: start;
-  }
-
   &.btn--center,
   &.btn--small {
     justify-content: center;
@@ -54,7 +60,8 @@
   }
 
   &:not(:disabled) {
-    &:hover, &:focus {
+    &:hover,
+    &:focus-visible {
       --state-color: var(--primary-800);
     }
 
@@ -91,7 +98,8 @@
     ));
 
     &:not(:disabled) {
-      &:hover, &:focus {
+      &:hover,
+      &:focus-visible {
         @include mat.button-overrides((
           filled-container-color: var(--red-500)
         ));

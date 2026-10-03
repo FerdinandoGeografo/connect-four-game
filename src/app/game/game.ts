@@ -1,20 +1,18 @@
-import { Component, inject, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { GameStore } from '../shared/data-access/game-store';
+import { GameBoard } from './ui/game-board/game-board';
 import { GameToolbar } from './ui/game-toolbar/game-toolbar';
+import { InGameMenu, PauseAction } from './ui/in-game-menu/in-game-menu';
+import { OutcomeCard } from './ui/outcome-card/outcome-card';
 import { ScoreCard } from './ui/score-card/score-card';
 import { TurnIndicator } from './ui/turn-indicator/turn-indicator';
-import { OutcomeCard } from './ui/outcome-card/outcome-card';
-import { GameStore } from '../shared/data-access/game-store';
-import { MatDialog } from '@angular/material/dialog';
-import { InGameMenu } from './ui/in-game-menu/in-game-menu';
-import { MenuItem } from '../shared/models/menu-item.model';
-import { Router } from '@angular/router';
-import { GameBoard } from './ui/game-board/game-board';
 
 @Component({
   selector: 'app-game',
   imports: [GameToolbar, ScoreCard, TurnIndicator, OutcomeCard, GameBoard],
   templateUrl: './game.html',
-  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './game.scss',
 })
 export class Game {
@@ -28,43 +26,30 @@ export class Game {
     this.gameStore.resumeGame();
   }
 
-  openGameMenu() {
+  protected openGameMenu() {
     this.gameStore.pauseGame();
-    const ref = this.dialog.open<InGameMenu, MenuItem[], never>(InGameMenu, {
-      disableClose: false,
-      ariaLabelledBy: 'pause-dialog-title',
-      // Lets the menu scroll instead of overflowing on landscape phones.
-      maxHeight: 'calc(100dvh - 2rem)',
-      data: [
-        {
-          styleClass: 'btn--neutral btn--center',
-          label: 'Continue game',
-          onClick: () => {
-            this.gameStore.resumeGame();
-            ref.close();
-          },
-        },
-        {
-          styleClass: 'btn--neutral btn--center',
-          label: 'Restart',
-          onClick: () => {
-            this.gameStore.restartGame();
-            ref.close();
-          },
-        },
-        {
-          styleClass: 'btn--primary btn--center',
-          label: 'Quit game',
-          onClick: () => {
-            this.gameStore.destroyGame();
-            ref.close();
-            this.router.navigate(['/main-menu']);
-          },
-        },
-      ],
-    });
+    this.dialog
+      .open<InGameMenu, void, PauseAction>(InGameMenu, {
+        ariaLabelledBy: 'pause-dialog-title',
+        // Lets the menu scroll instead of overflowing on landscape phones.
+        maxHeight: 'calc(100dvh - 2rem)',
+      })
+      .afterClosed()
+      .subscribe((action) => this.onPauseClosed(action));
+  }
 
-    // Escape and backdrop clicks close the dialog without choosing an item: resume the game.
-    ref.afterClosed().subscribe(() => this.gameStore.resumeGame());
+  /** Escape and backdrop clicks close without an action: the game resumes. */
+  private onPauseClosed(action: PauseAction | undefined) {
+    switch (action) {
+      case 'restart':
+        this.gameStore.restartGame();
+        break;
+      case 'quit':
+        this.gameStore.destroyGame();
+        this.router.navigate(['/main-menu']);
+        break;
+      default:
+        this.gameStore.resumeGame();
+    }
   }
 }
