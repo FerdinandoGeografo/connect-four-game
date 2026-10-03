@@ -1,4 +1,5 @@
 @use 'media' as *;
+@use 'motion';
 
 // Vertical measures from the Figma frames (mobile / tablet / desktop).
 // --chrome-top: space above the board (padding, toolbar, score cards, gaps);
@@ -47,13 +48,21 @@
       min-width: 0;
 
       &--first {
+        --enter-x: -4rem;
         grid-area: first;
         margin-left: 1.6rem;
       }
 
       &--second {
+        --enter-x: 4rem;
         grid-area: second;
         margin-right: 1.6rem;
+      }
+
+      &--first,
+      &--second {
+        --enter-y: 0;
+        @include motion.enter(rise-in, 0.1s);
       }
     }
 
@@ -66,6 +75,11 @@
         max(var(--board-min), calc((100dvh - var(--chrome-top) - var(--chrome-bottom)) * var(--board-ratio)))
       );
       margin-bottom: var(--chrome-bottom);
+
+      app-game-board {
+        --enter-y: 4rem;
+        @include motion.enter(rise-in, 0.15s, 0.55s);
+      }
 
       app-turn-indicator,
       app-outcome-card {
@@ -88,8 +102,48 @@
       width: 100vw;
       height: 100dvh;
       border-radius: 6rem 6rem 0 0;
-      background-color: var(--banner-color, var(--primary-800));
-      transition: background-color 0.35s;
+      overflow: hidden;
+    }
+
+    &__banner-layer {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      background-color: var(--primary-800);
+    }
+
+    // The new colour starts just below the visible part of the banner and
+    // covers the previous one, which stays underneath until it is hidden.
+    &__banner-enter {
+      animation: banner-rise 0.6s motion.$ease-out 0.35s both;
+
+      @include reduced-motion {
+        animation: fade-in 0.3s ease-out 0.35s both;
+      }
+    }
+
+    &__banner-leave {
+      z-index: 0;
+      animation: banner-hold 0.95s linear both;
+
+      @include reduced-motion {
+        animation-duration: 0.65s;
+      }
+    }
+
+    // Classes applied by `animate.enter` / `animate.leave` when the turn
+    // indicator and the outcome card swap. The outcome waits for the winning
+    // disc to land; the indicator waits for the outcome card to leave.
+    &__turn-enter {
+      @include motion.enter(pop-in, 0.2s, 0.4s);
+    }
+
+    &__outcome-enter {
+      @include motion.enter(pop-in, 0.7s, 0.45s);
+    }
+
+    &__card-leave {
+      @include motion.leave(pop-out);
     }
   }
 
@@ -152,5 +206,18 @@
         );
       }
     }
+  }
+}
+
+@keyframes banner-rise {
+  from {
+    transform: translateY(30rem);
+  }
+}
+
+// No visual change: only keeps the old layer in the DOM while the new one rises.
+@keyframes banner-hold {
+  to {
+    opacity: 1;
   }
 }

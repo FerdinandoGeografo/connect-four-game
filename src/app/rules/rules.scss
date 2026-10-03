@@ -1,4 +1,5 @@
 @use 'media' as *;
+@use 'motion';
 
 :host {
   min-height: 100dvh;
@@ -9,6 +10,8 @@
   justify-content: center;
 
   .rules {
+    --enter-y: 3rem;
+    @include motion.enter(rise-in, 0s, 0.5s);
     max-width: 48.6rem;
 
     &__content {
@@ -56,6 +59,7 @@
 
     &__back {
       transform: translateY(-50%);
+      @include motion.enter(pop-in, 0.3s, 0.4s);
     }
   }
 

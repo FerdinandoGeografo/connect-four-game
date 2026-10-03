@@ -1,0 +1,30 @@
+@use 'media' as *;
+
+// Motion tokens and helpers. This module emits no CSS: the keyframes it refers
+// to are global (see _animations.scss), so component styles can share them
+// without Angular scoping a copy per component.
+
+$ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+$ease-in: cubic-bezier(0.4, 0, 1, 1);
+$enter-duration: 0.45s;
+$stagger: 0.07s;
+
+// Entrance animation played when the element is rendered.
+// $name: a keyframe from _animations.scss (rise-in, slide-in, pop-in).
+// With reduced motion it becomes a short fade.
+@mixin enter($name: rise-in, $delay: 0s, $duration: $enter-duration) {
+  animation: $name $duration $ease-out $delay both;
+
+  @include reduced-motion {
+    animation: fade-in 0.2s ease-out both;
+  }
+}
+
+// Exit animation for elements removed with `animate.leave`.
+@mixin leave($name: pop-out, $duration: 0.2s) {
+  animation: $name $duration $ease-in both;
+
+  @include reduced-motion {
+    animation: fade-out 0.15s ease-in both;
+  }
+}

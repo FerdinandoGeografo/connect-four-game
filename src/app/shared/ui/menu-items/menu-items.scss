@@ -1,6 +1,19 @@
+@use 'motion';
+
 :host {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+
+  // Staggered after the card (main menu) or the dialog (pause menu) appears.
+  > button {
+    --enter-y: 1.5rem;
+
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        @include motion.enter(rise-in, 0.12s + $i * motion.$stagger, 0.4s);
+      }
+    }
+  }
 }

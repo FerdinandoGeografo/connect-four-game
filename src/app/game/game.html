@@ -34,19 +34,49 @@
     />
 
     @if (gameStore.isRoundOver()) {
-      <app-outcome-card [winner]="gameStore.winner()" (playAgainClicked)="gameStore.startRound()" />
+      <app-outcome-card
+        animate.enter="game__outcome-enter"
+        animate.leave="game__card-leave"
+        [winner]="gameStore.winner()"
+        (playAgainClicked)="gameStore.startRound()"
+      />
     } @else {
       <app-turn-indicator
+        animate.enter="game__turn-enter"
+        animate.leave="game__card-leave"
         [currentPlayer]="gameStore.currentPlayer()"
         [time]="gameStore.secondsLeft()"
       />
     }
 
-    <div
-      class="game__banner"
-      aria-hidden="true"
-      [style.--banner-color]="gameStore.bannerThemeVar()"
-    ></div>
+    <!-- One layer per state: on change the new layer rises from the bottom over the old one. -->
+    <div class="game__banner" aria-hidden="true">
+      @switch (gameStore.winnerCode()) {
+        @case ('first') {
+          <div
+            class="game__banner-layer"
+            animate.enter="game__banner-enter"
+            animate.leave="game__banner-leave"
+            [style.background-color]="gameStore.players().first.theme"
+          ></div>
+        }
+        @case ('second') {
+          <div
+            class="game__banner-layer"
+            animate.enter="game__banner-enter"
+            animate.leave="game__banner-leave"
+            [style.background-color]="gameStore.players().second.theme"
+          ></div>
+        }
+        @default {
+          <div
+            class="game__banner-layer"
+            animate.enter="game__banner-enter"
+            animate.leave="game__banner-leave"
+          ></div>
+        }
+      }
+    </div>
   </div>
 </div>
 

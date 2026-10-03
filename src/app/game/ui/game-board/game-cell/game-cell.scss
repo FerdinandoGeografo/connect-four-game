@@ -1,13 +1,24 @@
 @use 'sass:math';
 @use 'media' as *;
 @use 'board-geometry' as geo;
+@use 'motion';
+
+// The disc lands about halfway through the animation, then bounces three
+// times with decreasing height. The longer the fall, the longer the animation.
+$drop-duration: calc(0.55s + var(--row) * 0.08s);
+// Winning rings appear once the last disc has settled, one after the other
+// along the line, then pulse a few times.
+$ring-delay: calc(0.9s + var(--win-index, 0) * 0.1s);
+$ring-pulse-delay: calc(1.25s + var(--win-index, 0) * 0.1s);
 
 :host {
   @include geo.at-hole(geo.$disc-width, geo.$disc-height, geo.$disc-centre, geo.$disc-centre);
   display: block;
   // Start one row above the board, so the fall length matches the landing row.
   --drop-from: calc(-1 * (var(--row) + 1) * #{geo.$row-pitch-in-discs});
-  animation: disc-drop calc(0.3s + var(--row) * 0.07s) both;
+  // Squash around the bottom of the disc (70px disc in a 75px box).
+  transform-origin: 50% math.percentage(math.div(geo.$disc-width, geo.$disc-height));
+  animation: disc-drop $drop-duration both;
 
   .disc {
     display: block;
@@ -28,36 +39,68 @@
     border: 0.95cqi solid var(--neutral-0);
     border-radius: 50%;
     box-sizing: border-box;
+    animation:
+      pop-in 0.35s motion.$ease-out $ring-delay both,
+      ring-pulse 0.55s ease-in-out $ring-pulse-delay 6 alternate;
   }
 
   @include reduced-motion {
-    animation: disc-appear 0.15s ease-out both;
+    animation: fade-in 0.15s ease-out both;
+
+    &.winning::after {
+      animation: fade-in 0.2s ease-out 0.2s both;
+    }
   }
 }
 
 @keyframes disc-drop {
   0% {
     transform: translateY(var(--drop-from));
-    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.6);
   }
 
-  75% {
+  50% {
     transform: translateY(0);
-    animation-timing-function: ease-out;
+    scale: 1.06 0.92;
+    animation-timing-function: cubic-bezier(0, 0.4, 0.5, 1);
   }
 
-  88% {
-    transform: translateY(-10%);
+  64% {
+    transform: translateY(-16%);
+    scale: 0.98 1.03;
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.6);
+  }
+
+  77% {
+    transform: translateY(0);
+    scale: 1.03 0.96;
+    animation-timing-function: cubic-bezier(0, 0.4, 0.5, 1);
+  }
+
+  86% {
+    transform: translateY(-6%);
+    scale: 1;
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.6);
+  }
+
+  93% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0.4, 0.5, 1);
+  }
+
+  97% {
+    transform: translateY(-1.5%);
     animation-timing-function: ease-in;
   }
 
   100% {
     transform: translateY(0);
+    scale: 1;
   }
 }
 
-@keyframes disc-appear {
-  from {
-    opacity: 0;
+@keyframes ring-pulse {
+  to {
+    scale: 1.32;
   }
 }
