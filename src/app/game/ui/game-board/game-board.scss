@@ -52,7 +52,7 @@
       position: absolute;
       top: 0;
       bottom: 0;
-      left: calc(#{geo.x(geo.$hole-centre - geo.$pitch * 0.5)} + var(--col) * #{geo.x(geo.$pitch)});
+      left: geo.column-x(-0.5 * geo.$pitch);
       width: geo.x(geo.$pitch);
       border-radius: 1.2rem;
       cursor: pointer;
@@ -98,10 +98,11 @@
       position: absolute;
       z-index: 5;
       top: geo.y(geo.$marker-top);
-      left: calc(#{geo.x(geo.$hole-centre)} + var(--col) * #{geo.x(geo.$pitch)});
+      left: geo.column-x();
       width: geo.x(geo.$marker-width);
       height: auto;
       aspect-ratio: #{geo.$marker-width} / #{geo.$marker-height};
+      --marker-ease: #{motion.$ease-in};
       translate: -50% geo.$marker-hide-offset;
       opacity: 0;
       pointer-events: none;
@@ -109,17 +110,13 @@
       transition:
         left 0.15s ease,
         color 0.35s,
-        opacity 0.25s ease-in,
-        translate 0.3s cubic-bezier(0.4, 0, 1, 1);
+        opacity 0.2s var(--marker-ease),
+        translate 0.3s var(--marker-ease);
 
       &--visible {
+        --marker-ease: cubic-bezier(0, 0, 0.2, 1);
         translate: -50% 0;
         opacity: 1;
-        transition:
-          left 0.15s ease,
-          color 0.35s,
-          opacity 0.2s ease-out,
-          translate 0.3s cubic-bezier(0, 0, 0.2, 1);
       }
     }
   }
@@ -146,10 +143,6 @@
       translate: -50% 0;
       animation: none;
       transition: opacity 0.2s;
-
-      &--visible {
-        transition: opacity 0.2s;
-      }
     }
   }
 }

@@ -1,6 +1,27 @@
 @use '@angular/material' as mat;
 @use 'media' as *;
 
+@mixin avatar-on-top($content-padding, $content-height: auto) {
+  padding-top: 2.7rem;
+
+  &,
+  &.score--end {
+    .score__icon {
+      top: 0;
+      left: 50%;
+      right: auto;
+      translate: -50% 0;
+    }
+
+    .score__content {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: $content-height;
+      padding: $content-padding;
+    }
+  }
+}
+
 :host {
   display: block;
   position: relative;
@@ -58,22 +79,7 @@
   }
 
   @include below(xs) {
-    padding-top: 2.7rem;
-
-    &,
-    &.score--end {
-      .score__icon {
-        top: 0;
-        left: 50%;
-        right: auto;
-        translate: -50% 0;
-      }
-
-      .score__content {
-        height: auto;
-        padding: 3.6rem 0.5rem 1rem;
-      }
-    }
+    @include avatar-on-top(3.6rem 0.5rem 1rem);
   }
 
   @include up(md) {
@@ -117,23 +123,6 @@
   }
 
   @include side-layout {
-    padding-top: 2.7rem;
-
-    &,
-    &.score--end {
-      .score__icon {
-        top: 0;
-        left: 50%;
-        right: auto;
-        translate: -50% 0;
-      }
-
-      .score__content {
-        flex-direction: column;
-        justify-content: flex-start;
-        height: 16rem;
-        padding: 4.6rem 1rem 0;
-      }
-    }
+    @include avatar-on-top(4.6rem 1rem 0, 16rem);
   }
 }

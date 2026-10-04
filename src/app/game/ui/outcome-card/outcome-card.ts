@@ -12,14 +12,8 @@ import { Player } from '../../../shared/models/player.model';
 export class OutcomeCard {
   winner = input.required<Player | null>();
 
-  winnerLabel = computed(() => {
-    const winner = this.winner();
-    return winner ? winner.label : 'Board full';
-  });
-  winnerOutcome = computed(() => {
-    const winner = this.winner();
-    return winner ? winner.winVerb : 'Draw';
-  });
+  winnerLabel = computed(() => this.winner()?.label ?? 'Board full');
+  winnerOutcome = computed(() => this.winner()?.winVerb ?? 'Draw');
 
   playAgainClicked = output<void>();
 }

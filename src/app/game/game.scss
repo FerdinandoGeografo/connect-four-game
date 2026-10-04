@@ -10,6 +10,11 @@
   --outcome-overlap: 1.5rem;
   --indicator-overlap: 1.7rem;
   --banner-overlap: 0.5rem;
+  // Widest board that fits the viewport height between toolbar and banner.
+  --board-fit: max(
+    var(--board-min),
+    calc((100dvh - var(--chrome-top) - var(--chrome-bottom)) * var(--board-ratio))
+  );
 
   position: relative;
   display: flex;
@@ -65,11 +70,7 @@
     &__board {
       grid-area: board;
       position: relative;
-      width: min(
-        100%,
-        63.2rem,
-        max(var(--board-min), calc((100dvh - var(--chrome-top) - var(--chrome-bottom)) * var(--board-ratio)))
-      );
+      width: min(100%, 63.2rem, var(--board-fit));
       margin-bottom: var(--chrome-bottom);
 
       app-game-board {
@@ -79,15 +80,16 @@
 
       app-turn-indicator,
       app-outcome-card {
+        --overlap: var(--outcome-overlap);
         position: absolute;
         z-index: 10;
         top: 100%;
         left: 50%;
-        translate: -50% calc(-1 * var(--outcome-overlap));
+        translate: -50% calc(-1 * var(--overlap));
       }
 
       app-turn-indicator {
-        translate: -50% calc(-1 * var(--indicator-overlap));
+        --overlap: var(--indicator-overlap);
       }
     }
 
@@ -173,11 +175,7 @@
     .game {
       &__content {
         // A percentage width would collapse in a content-sized grid track.
-        --board-width: min(
-          calc(100vw - 2 * (14.1rem + 6rem + 2rem)),
-          63.2rem,
-          max(var(--board-min), calc((100dvh - var(--chrome-top) - var(--chrome-bottom)) * var(--board-ratio)))
-        );
+        --board-width: min(calc(100vw - 2 * (14.1rem + 6rem + 2rem)), 63.2rem, var(--board-fit));
 
         grid-template-columns: 14.1rem auto 14.1rem;
         grid-template-areas: 'first board second';

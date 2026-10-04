@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-rules',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [MatCard, MatCardContent, MatIconButton, MatIcon, RouterLink],
   templateUrl: './rules.html',
   styleUrl: './rules.scss',
 })

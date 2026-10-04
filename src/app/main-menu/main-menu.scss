@@ -1,18 +1,12 @@
+@use 'layout';
 @use 'media' as *;
-@use 'motion';
 
 // Below md the card has no surface: logo and buttons sit on the page background.
 :host {
-  min-height: 100dvh;
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include layout.centered-page;
 
   .menu {
-    --enter-y: 3rem;
-    @include motion.enter(rise-in, 0s, 0.5s);
-    max-width: 48.6rem;
+    @include layout.page-card;
     flex: 1;
     background: transparent;
     border: 3px solid transparent;
@@ -37,7 +31,6 @@
 
       &__content {
         padding: 7rem 4rem 6rem;
-        gap: 7.9rem;
       }
     }
   }

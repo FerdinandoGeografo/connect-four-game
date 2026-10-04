@@ -43,7 +43,11 @@ export function placeDisc(board: Board, column: number, player: PlayerCode): Dis
 }
 
 /** Looks for a line of CONNECT_LENGTH discs through the given cell. */
-export function findWin(board: Board, { row, column }: CellPosition, player: PlayerCode): WinCells | null {
+export function findWin(
+  board: Board,
+  { row, column }: CellPosition,
+  player: PlayerCode,
+): WinCells | null {
   for (const { row: dRow, column: dCol } of WIN_DIRECTIONS) {
     const forward = collectLine(board, row, column, dRow, dCol, player);
     const backward = collectLine(board, row, column, -dRow, -dCol, player);

@@ -40,13 +40,18 @@ $large-assets-min-width: 460px;
   @return math.percentage(math.div($px, $height));
 }
 
+// `left` of a box starting $offset px from the centre of hole column --col.
+@function column-x($offset: 0) {
+  @return calc(#{x($hole-centre + $offset)} + var(--col) * #{x($pitch)});
+}
+
 // Distance between two rows in disc heights, for translateY().
 $row-pitch-in-discs: math.percentage(math.div($pitch, $disc-height));
 
 // Positions a box of the given size centred on the hole at (--col, --row).
 @mixin at-hole($box-width, $box-height, $centre-x: math.div($box-width, 2), $centre-y: math.div($box-height, 2)) {
   position: absolute;
-  left: calc(#{x($hole-centre - $centre-x)} + var(--col) * #{x($pitch)});
+  left: column-x(-$centre-x);
   top: calc(#{y($hole-centre - $centre-y)} + var(--row, 0) * #{y($pitch)});
   width: x($box-width);
   height: y($box-height);

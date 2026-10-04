@@ -1,18 +1,13 @@
+@use 'layout';
 @use 'media' as *;
 @use 'motion';
 
 :host {
-  min-height: 100dvh;
-  padding: 2rem;
-  display: flex;
+  @include layout.centered-page;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
   .rules {
-    --enter-y: 3rem;
-    @include motion.enter(rise-in, 0s, 0.5s);
-    max-width: 48.6rem;
+    @include layout.page-card;
 
     &__content {
       padding: 3rem 3.4rem 5.4rem;
@@ -44,7 +39,6 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      list-style: none;
 
       li {
         display: grid;

@@ -56,16 +56,13 @@ export class GameStore {
     const result: CellData[] = [];
 
     for (let row = 0; row < BOARD_ROWS; row++) {
-      for (let col = 0; col < BOARD_COLUMNS; col++) {
-        const cell = board[row][col];
+      for (let column = 0; column < BOARD_COLUMNS; column++) {
+        const cell = board[row][column];
         if (cell === null) continue;
 
         result.push({
-          id: `${row}-${col}`,
-          position: {
-            row,
-            column: col,
-          },
+          id: `${row}-${column}`,
+          position: { row, column },
           player: cell,
           theme: players[cell].theme,
         });
@@ -130,8 +127,9 @@ export class GameStore {
   }
 
   startGame(mode: GameMode) {
-    this.patchState({
+    this.state.set({
       ...initialState,
+      ...newRound('first'),
       mode,
       phase: 'running',
       players: getPlayersByMode(mode),
@@ -148,18 +146,7 @@ export class GameStore {
     if (this.phase() !== 'round-over') return;
 
     // The starter of the previous round goes second in the next one.
-    const startingPlayer = getOpponent(this.state().startingPlayer);
-    this.patchState({
-      phase: 'running',
-      board: createEmptyBoard(),
-      currentPlayer: startingPlayer,
-      startingPlayer,
-      winner: null,
-      winningCells: null,
-      roundEnd: null,
-      lastMove: null,
-      secondsLeft: TURN_DURATION_SECONDS,
-    });
+    this.patchState({ ...newRound(getOpponent(this.state().startingPlayer)), phase: 'running' });
     this.startTurn();
   }
 
@@ -175,7 +162,7 @@ export class GameStore {
   }
 
   destroyGame() {
-    this.patchState({ ...initialState });
+    this.state.set(initialState);
   }
 
   dropDisc(column: number) {
@@ -193,29 +180,13 @@ export class GameStore {
     const { board, position } = placement;
     const lastMove = { player, position };
 
-    const win = findWin(board, position, player);
-    if (win) {
-      this.patchState({
-        board,
-        lastMove,
-        phase: 'round-over',
-        roundEnd: 'connect',
-        winner: player,
-        winningCells: win,
-        scores: this.incrementScore(player),
-      });
+    const winningCells = findWin(board, position, player);
+    if (winningCells) {
+      this.endRound('connect', player, { board, lastMove, winningCells });
       return;
     }
-
     if (isBoardFull(board)) {
-      this.patchState({
-        board,
-        lastMove,
-        phase: 'round-over',
-        roundEnd: 'draw',
-        winner: null,
-        winningCells: null,
-      });
+      this.endRound('draw', null, { board, lastMove });
       return;
     }
 
@@ -233,25 +204,21 @@ export class GameStore {
 
     const next = this.secondsLeft() - 1;
     if (next <= 0) {
-      const winner = this.currentOpponentCode();
-      this.patchState({
-        secondsLeft: 0,
-        phase: 'round-over',
-        roundEnd: 'timeout',
-        winner,
-        scores: this.incrementScore(winner),
-      });
+      this.endRound('timeout', this.currentOpponentCode(), { secondsLeft: 0 });
       return;
     }
-
     this.patchState({ secondsLeft: next });
   }
 
-  private incrementScore(winnerCode: PlayerCode) {
-    return {
-      ...this.scores(),
-      [winnerCode]: this.scores()[winnerCode] + 1,
-    };
+  private endRound(roundEnd: RoundEnd, winner: PlayerCode | null, patch: Partial<GameState>) {
+    const scores = this.scores();
+    this.patchState({
+      ...patch,
+      phase: 'round-over',
+      roundEnd,
+      winner,
+      scores: winner ? { ...scores, [winner]: scores[winner] + 1 } : scores,
+    });
   }
 
   private startTurn() {
@@ -279,20 +246,23 @@ interface GameState {
   secondsLeft: number;
 }
 
+function newRound(startingPlayer: PlayerCode) {
+  return {
+    board: createEmptyBoard(),
+    currentPlayer: startingPlayer,
+    startingPlayer,
+    winner: null,
+    winningCells: null,
+    roundEnd: null,
+    lastMove: null,
+    secondsLeft: TURN_DURATION_SECONDS,
+  } satisfies Partial<GameState>;
+}
+
 const initialState: GameState = {
+  ...newRound('first'),
   mode: 'pvp',
   phase: 'idle',
   players: getPlayersByMode('pvp'),
-  board: createEmptyBoard(),
-  currentPlayer: 'first',
-  startingPlayer: 'first',
-  scores: {
-    first: 0,
-    second: 0,
-  },
-  winner: null,
-  winningCells: null,
-  roundEnd: null,
-  lastMove: null,
-  secondsLeft: TURN_DURATION_SECONDS,
+  scores: { first: 0, second: 0 },
 };
