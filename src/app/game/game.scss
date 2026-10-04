@@ -99,32 +99,27 @@
       translate: -50% 0;
       width: 100vw;
       height: 100dvh;
-      border-radius: 6rem 6rem 0 0;
       overflow: hidden;
     }
 
+    // Starts after the winning disc lands; the old layer sinks while the new one rises.
     &__banner-layer {
       position: absolute;
       z-index: 1;
       inset: 0;
+      border-radius: 6rem 6rem 0 0;
       background-color: var(--primary-800);
     }
 
     &__banner-enter {
-      animation: banner-rise 0.6s motion.$ease-out 0.35s both;
-
-      @include reduced-motion {
-        animation: fade-in 0.3s ease-out 0.35s both;
-      }
+      @include motion.enter(banner-rise, 0.35s, 0.6s);
     }
 
     &__banner-leave {
+      --leave-y: 30rem;
       z-index: 0;
-      animation: banner-hold 0.95s linear both;
-
-      @include reduced-motion {
-        animation-duration: 0.65s;
-      }
+      @include motion.leave(fall-out, 0.6s, 0.35s);
+      animation-timing-function: motion.$ease-out;
     }
 
     &__turn-enter {
@@ -210,11 +205,5 @@
 @keyframes banner-rise {
   from {
     transform: translateY(30rem);
-  }
-}
-
-@keyframes banner-hold {
-  to {
-    opacity: 1;
   }
 }

@@ -16,8 +16,8 @@ $stagger: 0.07s;
   }
 }
 
-@mixin leave($name: pop-out, $duration: 0.2s) {
-  animation: $name $duration $ease-in both;
+@mixin leave($name: pop-out, $duration: 0.2s, $delay: 0s) {
+  animation: $name $duration $ease-in $delay both;
 
   @include reduced-motion {
     animation: fade-out 0.15s ease-in both;

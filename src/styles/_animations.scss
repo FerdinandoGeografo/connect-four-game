@@ -20,6 +20,13 @@
   }
 }
 
+@keyframes fall-out {
+  to {
+    opacity: 0;
+    transform: translate(var(--leave-x, 0), var(--leave-y, 2rem));
+  }
+}
+
 @keyframes pop-in {
   from {
     opacity: 0;
