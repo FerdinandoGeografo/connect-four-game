@@ -1,22 +1,25 @@
-# Frontend Mentor - Connect Four game
+# Frontend Mentor - Connect Four game solution
 
-![Design preview for the Connect Four game coding challenge](./preview.jpg)
+This is a solution to the [Connect Four game challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/connect-four-game-6G8QVH923s). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
-## Welcome! 👋
+## Table of contents
 
-Thanks for purchasing this premium Frontend Mentor coding challenge.
+- [Overview](#overview)
+  - [The challenge](#the-challenge)
+  - [Game behaviour](#game-behaviour)
+  - [Screenshot](#screenshot)
+  - [Links](#links)
+- [My process](#my-process)
+  - [Built with](#built-with)
+  - [What I learned](#what-i-learned)
+  - [Useful resources](#useful-resources)
+- [Author](#author)
 
-[Frontend Mentor](https://www.frontendmentor.io) challenges help you improve your coding skills by building realistic projects. These premium challenges are perfect portfolio pieces, so please feel free to use what you create in your portfolio to show others.
+## Overview
 
-**To do this challenge, you need a strong understanding of HTML, CSS, and JavaScript.**
+### The challenge
 
-## The challenge
-
-Your challenge is to build out this Connect Four game and get it looking as close to the design as possible.
-
-You can use any tools you like to help you complete the challenge. So if you've got something you'd like to practice, feel free to give it a go.
-
-Your users should be able to:
+Users should be able to:
 
 - View the game rules
 - Play a game of Connect Four against another human player (alternating turns on the same computer)
@@ -24,82 +27,143 @@ Your users should be able to:
 - See hover and focus states for all interactive elements on the page
 - **Bonus**: See the discs animate into their position when a move is made
 - **Bonus**: Play against the computer
+- Play the whole game with the keyboard
 
-Want some support on the challenge? [Join our community](https://www.frontendmentor.io/community) and ask questions in the **#help** channel.
+### Game behaviour
 
-### Expected behaviour
+- Player 1 goes first in the first round, then the starting player alternates in the following rounds.
+- Each player has 30 seconds per turn. When the timer reaches zero, the other player wins the round.
+- Four discs in a row (horizontally, vertically or diagonally) win the round and increment the winner's score; a full board is a draw.
+- The Menu button pauses the game and opens the in-game menu: continue, restart or quit to the main menu. Escape or a click outside also resumes the game.
+- The Restart button resets both scores to zero.
+- Against the CPU, the computer wins when it can, otherwise blocks your winning move, otherwise plays as close to the centre as possible.
 
-- The initial screen should be the Main Menu. Note that if you want your solution screenshot to match the design, we recommend first submitting the solution showing the game in a clean state. Then editing your solution so that the Main Menu shows on the first load. Otherwise, the design comparison slider will show the Main Menu instead of the game board.
-  - If you're not doing the bonus with the vs CPU option, simply remove that item from the Main Menu.
-- Player 1 goes first in the first game. The first turn then alternates in subsequent games.
-- When a player wins a round, the win state is shown, and the winning player's score is incremented by 1.
-- Each player has 30 seconds to take their turn. The counter counts down in real time. If it reaches zero, the win state is shown for the other player and their score is incremented by 1.
-- Clicking the Menu button on the game board opens up the Ingame Menu.
-  - Clicking Quit Game from the Ingame Menu navigates to the Main Menu.
-- Clicking the Restart button on the game board resets both players' scores to zero.
+### Screenshot
 
-## Where to find everything
+![Main menu | Desktop](./screenshots/menu-desktop.png)
+![Game | Desktop](./screenshots/game-desktop.png)
+![Win state | Tablet](./screenshots/win-tablet.png)
+![Game | Mobile](./screenshots/game-mobile.png)
+![Pause menu | Mobile](./screenshots/pause-mobile.png)
+![Rules | Mobile](./screenshots/rules-mobile.png)
 
-Your task is to build out the project to the design file provided. We provide both Sketch and Figma versions of the design, so you can choose which tool you prefer to use. You can download the design file on the platform. **Please be sure not to share them with anyone else.** The design download comes with a `README.md` file as well to help you get set up.
+### Links
 
-All the required assets for this project are in the `/assets` folder. The images are already exported for the correct screen size and optimized. Some are reusable at multiple screen sizes. So if you don't see an image in a specific folder, it will typically be in another folder for that page.
+- Solution URL: [GitHub Repository](https://github.com/FerdinandoGeografo/connect-four-game)
+- Live Site URL: [Connect Four](https://your-live-site-url.com)
 
-We also include variable and static font files for the required fonts for this project. You can choose to either link to Google Fonts or use the local font files to host the fonts yourself. Note that we've removed the static font files for the font weights that aren't needed for this project.
+## My process
 
-The design system in the design file will give you more information about the various colors, fonts, and styles used in this project. Our fonts always come from [Google Fonts](https://fonts.google.com/).
+### Built with
 
-## Building your project
+- Semantic HTML5 markup
+- CSS custom properties
+- SASS / SCSS | BEM
+- CSS Grid, Flexbox and container queries
+- Mobile-first workflow
+- Native CSS animations via `animate.enter` / `animate.leave`
+- View Transitions API for route changes
+- [TypeScript](https://www.typescriptlang.org/) - JS superset
+- [Angular (v22)](https://angular.dev/) - Frontend Typescript Framework
+- [Angular Material & CDK](https://material.angular.dev/) - UI Components libraries
+- [RxJS](https://rxjs.dev/) - For the turn timer and the CPU moves
 
-Feel free to use any workflow that you feel comfortable with. Below is a suggested process, but do not feel like you need to follow these steps:
+### What I learned
 
-1. Separate the `starter-code` from the rest of this project and rename it to something meaningful for you. Initialize the codebase as a public repository on [GitHub](https://github.com/). Creating a repo will make it easier to share your code with the community if you need help. If you're not sure how to do this, [have a read-through of this Try Git resource](https://try.github.io/). **⚠️ IMPORTANT ⚠️: There are already a couple of `.gitignore` files in this project. Please do not remove them or change the content of the files. If you create a brand new project, please use the `.gitignore` files provided in your new codebase. This is to avoid the accidental upload of the design files to GitHub. With these premium challenges, please be sure not to share the design files in your GitHub repo. Thanks!**
-2. Configure your repository to publish your code to a web address. This will also be useful if you need some help during a challenge as you can share the URL for your project with your repo URL. There are a number of ways to do this, and we provide some recommendations below.
-3. Look through the designs to start planning out how you'll tackle the project. This step is crucial to help you think ahead for CSS classes to create reusable styles.
-4. Before adding any styles, structure your content with HTML. Writing your HTML first can help focus your attention on creating well-structured content.
-5. Write out the base styles for your project, including general content styles, such as `font-family` and `font-size`.
-6. Start adding styles to the top of the page and work down. Only move on to the next section once you're happy you've completed the area you're working on.
+I kept my usual feature-based folder structure: `main-menu`, `game` and `rules` are routed components, each with its own `ui` folder of presentational components, while the game state, models and pure game rules live in `shared` (`data-access`, `models`, `utils`).
 
-## Deploying your project
+#### A signal store with explicit phases
 
-As mentioned above, there are many ways to host your project for free. Our recommended hosts are:
+The whole game lives in a single `GameStore`, declared with the new `@Service()` decorator of Angular 22. Its state is one `signal`, and everything the UI needs is derived with `computed`. A `phase` (`idle`, `running`, `paused`, `round-over`) makes every action easy to guard:
 
-- [GitHub Pages](https://pages.github.com/)
-- [Vercel](https://vercel.com/)
-- [Netlify](https://www.netlify.com/)
+```ts
+@Service()
+export class GameStore {
+  private readonly state = signal<GameState>(initialState);
 
-You can host your site using one of these solutions or any of our other trusted providers. [Read more about our recommended and trusted hosts](https://medium.com/frontend-mentor/frontend-mentor-trusted-hosting-providers-bf000dfebe).
+  readonly phase = computed(() => this.state().phase);
+  readonly canPlay = computed(() => this.phase() === 'running' && !this.isCpuTurn());
 
-## Create a custom `README.md`
+  dropDisc(column: number) {
+    if (!this.canPlay()) return;
+    if (!this.playableColumns().includes(column)) return;
 
-We strongly recommend overwriting this `README.md` with a custom one. We've provided a template inside the [`README-template.md`](./README-template.md) file in this starter code.
+    this.applyDrop(column);
+  }
+}
+```
 
-The template provides a guide for what to add. A custom `README` will help you explain your project and reflect on your learnings. Please feel free to edit our template as much as you like.
+The rules themselves (`placeDisc`, `findWin`, `chooseCpuColumn`...) are pure functions that take a board and return a new one, so the store only orchestrates them.
 
-Once you've added your information to the template, delete this file and rename the `README-template.md` file to `README.md`. That will make it show up as your repository's README file.
+#### Cancellable timers with RxJS
 
-## Submitting your solution
+The 30 seconds timer and the CPU "thinking" delay are two subjects piped through `switchMap`. Every new turn restarts the interval, so each turn gets full seconds. If the game is paused, restarted or quit while the CPU is thinking, the pending move is discarded:
 
-Submit your solution on the platform for the rest of the community to see. Follow our ["Complete guide to submitting solutions"](https://medium.com/frontend-mentor/a-complete-guide-to-submitting-solutions-on-frontend-mentor-ac6384162248) for tips on how to do this.
+```ts
+this.cpuMove$
+  .pipe(
+    switchMap(() => {
+      const board = this.board();
+      const column = chooseCpuColumn(board, this.currentPlayerCode());
+      if (column === null) return EMPTY;
 
-Remember, if you're looking for feedback on your solution, be sure to ask questions when submitting it. The more specific and detailed you are with your questions, the higher the chance you'll get valuable feedback from the community.
+      const thinkMs = CPU_THINK_MIN_MS + Math.random() * (CPU_THINK_MAX_MS - CPU_THINK_MIN_MS);
+      return timer(thinkMs).pipe(map(() => ({ board, column })));
+    }),
+    takeUntilDestroyed(),
+  )
+  .subscribe(({ board, column }) => {
+    if (this.phase() !== 'running' || !this.isCpuTurn() || this.board() !== board) return;
+    this.applyDrop(column);
+  });
+```
 
-**⚠️ IMPORTANT ⚠️: With these premium challenges, please be sure not to upload the design files to GitHub when you're submitting to the platform and sharing it around. If you've created a brand new project, the easiest way to do that is to copy across the `.gitignore` provided in this starter project.**
+#### A responsive board without pixel math
 
-## Sharing your solution
+The board is made of the two original SVG layers (black at the back, white at the front), with the discs sliding in between. Instead of computing positions in TypeScript, I measured the assets once and turned every position into a percentage of the board box with Sass functions. Discs, column buttons, focus outline and marker stay aligned at any size, and a container query switches to the large assets when the board is wide enough:
 
-There are multiple places you can share your solution:
+```scss
+@function x($px) {
+  @return math.percentage(math.div($px, $width));
+}
 
-1. Share your solution page in the **#finished-projects** channel of the [community](https://www.frontendmentor.io/community).
-2. Tweet [@frontendmentor](https://twitter.com/frontendmentor) and mention **@frontendmentor**, including the repo and live URLs in the tweet. We'd love to take a look at what you've built and help share it around.
-3. Share your solution on other social channels like LinkedIn.
-4. Blog about your experience building your project. Writing about your workflow, technical choices, and talking through your code is a brilliant way to reinforce what you've learned. Great platforms to write on are [dev.to](https://dev.to/), [Hashnode](https://hashnode.com/), and [CodeNewbie](https://community.codenewbie.org/).
+@mixin at-hole($box-width, $box-height, $centre-x: math.div($box-width, 2), $centre-y: math.div($box-height, 2)) {
+  position: absolute;
+  left: column-x(-$centre-x);
+  top: calc(#{y($hole-centre - $centre-y)} + var(--row, 0) * #{y($pitch)});
+  width: x($box-width);
+  height: y($box-height);
+}
+```
 
-We provide templates to help you share your solution once you've submitted it on the platform. Please do edit them and include specific questions when you're looking for feedback.
+Each disc only receives its `--row` and `--col`, and the drop animation reads the same variables, so the fall length always matches the landing row.
 
-The more specific you are with your questions the more likely it is that another member of the community will give you feedback.
+#### An accessible board
 
-## Got feedback for us?
+The board is a group of 7 native `<button>`s, one per column, with a roving tabindex: it is a single tab stop, arrow keys and Home/End move between columns, Enter or Space drop a disc. Each button announces its contents (e.g. "Column 4: Player 1, Player 2 from the bottom, 4 slots free") and uses `aria-disabled`, so focus is not lost during the CPU turn or the pause.
 
-We love receiving feedback! We're always looking to improve our challenges and our platform. So if you have anything you'd like to mention, please email hi[at]frontendmentor[dot]io.
+Moves, turn changes and round results are announced through a visually hidden live region fed by a `computed` of the store, while the timer uses `role="timer"`, so screen readers are not flooded with every second.
 
-**Have fun building!** 🚀
+#### Animations
+
+Elements appear and leave with `animate.enter` / `animate.leave` and a few shared keyframes; `prefers-reduced-motion` turns them into short fades. Some details I enjoyed building:
+
+- the bottom banner is re-created when the winner changes, so the new colour rises while the previous one sinks and fades;
+- the turn indicator replays its entrance "pop" when the turn passes, through the Web Animations API, because the element never leaves the DOM;
+- route changes use `withViewTransitions()`, with the logo moving between the main menu and the game toolbar.
+
+As in my previous challenges, the SCSS partials live in `src/styles` and `angular.json` adds that folder to `stylePreprocessorOptions.includePaths`, so components can simply `@use 'media'` or `@use 'board-geometry'`.
+
+### Useful resources
+
+- [Enter and Leave animations](https://angular.dev/guide/animations) - Angular's guide to `animate.enter` / `animate.leave`, used for every entrance and exit animation of the game.
+- [Route transition animations](https://angular.dev/guide/routing/route-transition-animations) - How to enable the View Transitions API in the Angular router.
+- [CSS container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) - Used to switch between the small and large board assets based on the board's own width.
+- [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) - To replay an animation on an element that stays in the DOM.
+- [Developing a keyboard interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) - The WAI-ARIA pattern behind the roving tabindex of the board columns.
+
+## Author
+
+- Frontend Mentor - [@FerdinandoGeografo](https://www.frontendmentor.io/profile/FerdinandoGeografo)
+- LinkedIn - [@FerdinandoGeografo](https://www.linkedin.com/in/ferdinandogeografo/)
+- GitHub - [@FerdinandoGeografo](https://github.com/FerdinandoGeografo/)
