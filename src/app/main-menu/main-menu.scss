@@ -1,8 +1,7 @@
 @use 'media' as *;
 @use 'motion';
 
-// Mobile: no card, logo and buttons straight on the light purple background.
-// md+: 480px card on the dark purple background.
+// Below md the card has no surface: logo and buttons sit on the page background.
 :host {
   min-height: 100dvh;
   padding: 2rem;

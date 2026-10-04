@@ -1,9 +1,6 @@
 @use '@angular/material' as mat;
 @use 'media' as *;
 
-// Mobile: compact card (142 × 81) with the avatar overlapping its outer side.
-// md: wide card (272 × 100), label and score on one row.
-// Side layout: tall card (141 × 160) with the avatar overlapping its top.
 :host {
   display: block;
   position: relative;
@@ -80,7 +77,7 @@
   }
 
   @include up(md) {
-    // Tablet frame: the avatar circle (not its shadow) is centred on the card.
+    // The avatar circle, not its shadow, is centred on the card.
     .score__icon {
       translate: -50% -2.7rem;
     }

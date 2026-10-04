@@ -6,8 +6,7 @@
   --board-min: 28rem;
   --chrome-top: 27.1rem;
   --chrome-bottom: 17rem;
-  // Overlaps on the board, measured on the Figma shapes. The turn indicator
-  // SVG starts 2px above its shape (stroke), so it needs 2px more.
+  // Overlaps on the board from Figma; the turn indicator SVG adds a 2px stroke on top.
   --outcome-overlap: 1.5rem;
   --indicator-overlap: 1.7rem;
   --banner-overlap: 0.5rem;
@@ -178,7 +177,7 @@
 
     .game {
       &__content {
-        // In a grid track sized by content, a percentage width would collapse.
+        // A percentage width would collapse in a content-sized grid track.
         --board-width: min(
           calc(100vw - 2 * (14.1rem + 6rem + 2rem)),
           63.2rem,
@@ -192,7 +191,7 @@
         width: auto;
       }
 
-      // Figma: the avatar top is 168px below the board top (scaled with the board).
+      // Figma: avatar top 168px below the board top, scaled with the board.
       &__score {
         &--first,
         &--second {
@@ -214,7 +213,6 @@
   }
 }
 
-// No visual change: only keeps the old layer in the DOM while the new one rises.
 @keyframes banner-hold {
   to {
     opacity: 1;

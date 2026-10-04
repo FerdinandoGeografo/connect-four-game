@@ -47,7 +47,6 @@ export class GameStore {
 
   readonly isRoundOver = computed(() => this.phase() === 'round-over');
   readonly isCpuTurn = computed(() => this.currentPlayer().type === 'cpu');
-  /** True when the local player may drop a disc right now. */
   readonly canPlay = computed(() => this.phase() === 'running' && !this.isCpuTurn());
   readonly playableColumns = computed(() => getPlayableColumns(this.board()));
   readonly winningCells = computed(() => this.state().winningCells);
@@ -75,10 +74,7 @@ export class GameStore {
     return result;
   });
 
-  /**
-   * Text for the polite live region: it changes only on moves, turn changes,
-   * pause and round end, never on timer ticks.
-   */
+  /** Live region text: changes on moves, turns, pause and round end, never on timer ticks. */
   readonly statusMessage = computed(() => {
     const { phase, players, lastMove, roundEnd } = this.state();
     const current = this.currentPlayer();
@@ -106,7 +102,7 @@ export class GameStore {
   private readonly turnTimer$ = new Subject<void>();
 
   constructor() {
-    // Restart the 1s interval at the start of every turn so each turn gets full seconds.
+    // Restarted on every turn, so each turn gets full seconds.
     this.turnTimer$
       .pipe(
         switchMap(() => interval(1000)),

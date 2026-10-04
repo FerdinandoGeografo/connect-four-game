@@ -1,11 +1,6 @@
 @use 'media' as *;
 @use 'motion';
 
-// Global keyframes used through the `motion.enter()` / `motion.leave()` mixins.
-// Translations read `--enter-x` / `--enter-y` so each element can choose its
-// direction and distance. `pop-*` animate the individual `scale` property, so
-// they compose with elements positioned through `translate` or `transform`.
-
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -43,8 +38,6 @@
   }
 }
 
-// Route transitions (router `withViewTransitions()`): quick cross-fade of the
-// page, while the logo moves between the main menu and the game toolbar.
 ::view-transition-old(root) {
   animation: fade-out 0.18s motion.$ease-in both;
 }

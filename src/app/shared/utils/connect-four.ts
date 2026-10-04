@@ -56,10 +56,7 @@ export function findWin(board: Board, { row, column }: CellPosition, player: Pla
   return null;
 }
 
-/**
- * CPU heuristic: win if possible, otherwise block the opponent's win,
- * otherwise play as close to the centre as possible.
- */
+/** CPU heuristic: win, else block the opponent's win, else play closest to the centre. */
 export function chooseCpuColumn(
   board: Board,
   cpu: PlayerCode,

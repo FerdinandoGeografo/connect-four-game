@@ -3,20 +3,17 @@
 @use 'board-geometry' as geo;
 @use 'motion';
 
-// The disc lands about halfway through the animation, then bounces three
-// times with decreasing height. The longer the fall, the longer the animation.
+// Lands halfway through, then three smaller bounces; longer falls last longer.
 $drop-duration: calc(0.55s + var(--row) * 0.08s);
-// Winning rings appear once the last disc has settled, one after the other
-// along the line, then pulse a few times.
+// Rings appear along the line once the last disc has settled, then pulse.
 $ring-delay: calc(0.9s + var(--win-index, 0) * 0.1s);
 $ring-pulse-delay: calc(1.25s + var(--win-index, 0) * 0.1s);
 
 :host {
   @include geo.at-hole(geo.$disc-width, geo.$disc-height, geo.$disc-centre, geo.$disc-centre);
   display: block;
-  // Start one row above the board, so the fall length matches the landing row.
+  // Starts one row above the board.
   --drop-from: calc(-1 * (var(--row) + 1) * #{geo.$row-pitch-in-discs});
-  // Squash around the bottom of the disc (70px disc in a 75px box).
   transform-origin: 50% math.percentage(math.div(geo.$disc-width, geo.$disc-height));
   animation: disc-drop $drop-duration both;
 
@@ -26,8 +23,7 @@ $ring-pulse-delay: calc(1.25s + var(--win-index, 0) * 0.1s);
     height: 100%;
   }
 
-  // Winning discs get a white ring (Figma: 34px ring on a 64px hole), so the
-  // result is not conveyed by colour alone.
+  // Figma ring (34px); the win is not conveyed by colour alone.
   &.winning::after {
     content: '';
     position: absolute;

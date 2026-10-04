@@ -2,11 +2,6 @@ import { Component, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { CellData } from '../../../../shared/models/board.model';
 
-/**
- * A dropped disc. The board renders one per occupied cell, tracked by cell id,
- * so the drop animation runs once when the disc is created and never restarts
- * on unrelated state updates.
- */
 @Component({
   selector: 'app-game-cell',
   imports: [MatIcon],
@@ -21,6 +16,6 @@ import { CellData } from '../../../../shared/models/board.model';
 })
 export class GameCell {
   cell = input.required<CellData>();
-  /** Position in the winning line (0-3), or null when the disc is not part of it. */
+  /** Position in the winning line (0-3), staggers the ring animation. */
   winIndex = input<number | null>(null);
 }

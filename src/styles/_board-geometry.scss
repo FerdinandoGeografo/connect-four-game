@@ -1,9 +1,7 @@
 @use 'sass:math';
 
-// Board geometry measured on the original assets (board-layer-*-large.svg,
-// 632 × 584). The small assets (335 × 310) use the same proportions, so every
-// position is expressed as a percentage of the board box and stays aligned at
-// any rendered size.
+// Measured on the 632 × 584 assets; the 335 × 310 ones share the proportions,
+// so positions are percentages of the board box.
 $width: 632;
 $height: 584;
 $pitch: 88; // distance between hole centres, both axes
@@ -11,33 +9,27 @@ $hole-centre: 52; // centre of the first hole from the top/left edge
 $hole-size: 64;
 $corner-radius: 40;
 
-// `counter` icon: 70 × 75 (disc of 70 plus a 5px shadow), disc centre at 35 × 35.
+// `counter` icon: 70px disc plus a 5px shadow below.
 $disc-width: 70;
 $disc-height: 75;
 $disc-centre: 35;
 
-// `marker` icon: 38 × 36; its tip is at y ≈ 30. In the frames the marker top
-// sits 9.5px above the board edge (tip 18px into the frame); here it is raised
-// so the tip rests on the edge and the bounce stays clear of the holes.
+// `marker` icon, raised so its tip (y ≈ 30) rests on the board edge.
 $marker-width: 38;
 $marker-height: 36;
 $marker-top: -30;
-// Distance (in marker heights) the marker travels upward while hiding.
 $marker-hide-offset: -70%;
 
-// Focus pill around a column of holes: 12px above the first hole, 12px below
-// the last one (holes span 20 → 524), 6px on each side of the 64px holes.
+// Focus pill: 12px around the column of holes (holes span 20 → 524), 6px beside them.
 $focus-inset-top: 12;
 $focus-inset-bottom: $height - 532;
 $focus-inset-x: math.percentage(math.div(($pitch - $hole-size) * 0.5 - 6, $pitch));
 
-// The small black layer (335 × 320) and the large one (632 × 594) are taller
-// than the white layer because of their drop shadow.
+// The black layers are taller than the white ones because of their drop shadow.
 $back-height-small: math.div(320, 310) * 100%;
 $back-height-large: math.div(594, $height) * 100%;
 
-// Above this rendered width the large assets look closer to the design
-// (thinner strokes) than the small ones scaled up.
+// From this rendered width the large assets (thinner strokes) match the design better.
 $large-assets-min-width: 460px;
 
 @function x($px) {
@@ -48,7 +40,7 @@ $large-assets-min-width: 460px;
   @return math.percentage(math.div($px, $height));
 }
 
-// Distance between two rows expressed in disc heights, for translateY().
+// Distance between two rows in disc heights, for translateY().
 $row-pitch-in-discs: math.percentage(math.div($pitch, $disc-height));
 
 // Positions a box of the given size centred on the hole at (--col, --row).

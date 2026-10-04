@@ -5,7 +5,6 @@
   width: var(--logo-size);
   height: var(--logo-size);
 
-  // The 58 × 61 SVG adds a 3px stroke and a 3px shadow around the 52px group.
   svg {
     display: block;
     width: calc(var(--logo-size) * 58 / 52);

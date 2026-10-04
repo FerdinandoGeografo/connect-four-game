@@ -13,7 +13,6 @@ export interface Player {
   turnLabel: string;
   winVerb: 'wins' | 'win';
   theme: PlayerTheme;
-  /** Text colour readable on `theme`. */
   themeText: PlayerThemeText;
 }
 

@@ -35,7 +35,7 @@
       color: var(--primary-600);
     }
 
-    // Line 1 of the objective fills the 295px mobile box to the pixel; Figma wraps it.
+    // The first line fills the 295px mobile box exactly; Figma wraps it.
     &__text {
       padding-right: 0.1rem;
     }
@@ -74,7 +74,7 @@
     }
   }
 
-  // Mobile and tablet frames centre card + check; the desktop frames centre the card alone.
+  // The desktop frame centres the card alone, the others card and check together.
   @include up(lg) {
     padding-top: 5.2rem;
   }
