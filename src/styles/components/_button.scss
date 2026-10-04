@@ -3,11 +3,14 @@
 @use 'motion';
 
 .btn {
-  transition:
-    border-color 0.35s ease-in-out,
-    box-shadow 0.35s ease-in-out,
-    background-color 0.35s ease-in-out,
-    scale 0.2s motion.$ease-out;
+  // Material sets its own `transition` on filled buttons: win on specificity.
+  &:is(.mdc-button, .mdc-icon-button) {
+    transition:
+      border-color 0.35s ease-in-out,
+      box-shadow 0.35s ease-in-out,
+      background-color 0.35s ease-in-out,
+      scale 0.25s motion.$ease-out;
+  }
 
   &.mdc-button {
     --state-color: var(--neutral-900);
@@ -34,7 +37,9 @@
   }
 
   @include reduced-motion {
-    transition-property: border-color, box-shadow, background-color;
+    &:is(.mdc-button, .mdc-icon-button) {
+      transition-property: border-color, box-shadow, background-color;
+    }
   }
 
   @include mat.button-overrides((
