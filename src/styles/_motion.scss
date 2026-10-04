@@ -9,10 +9,11 @@ $stagger: 0.07s;
 
 // With reduced motion, enter() and leave() become short fades.
 @mixin enter($name: rise-in, $delay: 0s, $duration: $enter-duration) {
-  animation: $name $duration $ease-out $delay both;
+  // Backwards only: a forwards fill would keep overriding properties such as `scale`.
+  animation: $name $duration $ease-out $delay backwards;
 
   @include reduced-motion {
-    animation: fade-in 0.2s ease-out both;
+    animation: fade-in 0.2s ease-out backwards;
   }
 }
 
