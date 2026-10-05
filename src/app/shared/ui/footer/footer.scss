@@ -1,0 +1,61 @@
+@use 'layout';
+@use 'media' as *;
+@use 'motion';
+
+// Sits on the bottom banner of the game page, below the dialog overlay.
+:host {
+  position: absolute;
+  z-index: 20;
+  bottom: layout.$footer-bottom;
+  left: 50%;
+  translate: -50% 0;
+  view-transition-name: footer;
+  @include motion.enter(rise-in, 0.6s);
+
+  // Out of the way of the centred turn indicator and outcome card.
+  @include side-layout {
+    left: auto;
+    right: 2rem;
+    translate: none;
+  }
+
+  .footer {
+    padding: 0.5rem 1.6rem;
+    border-radius: 99rem;
+    background: var(--primary-800);
+    color: var(--neutral-0);
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &__link {
+      position: relative;
+      color: var(--yellow-500);
+      font-weight: 700;
+      text-decoration: none;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        bottom: -0.1rem;
+        height: 0.1rem;
+        background: currentColor;
+        scale: 0 1;
+        transition: scale 0.35s ease-in-out;
+      }
+
+      &:hover::after,
+      &:focus-visible::after {
+        scale: 1;
+      }
+
+      &:focus-visible {
+        outline: 0.2rem solid currentColor;
+        outline-offset: 0.2rem;
+        border-radius: 0.2rem;
+      }
+    }
+  }
+}
