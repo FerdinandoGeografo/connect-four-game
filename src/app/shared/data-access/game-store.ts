@@ -44,6 +44,8 @@ export class GameStore {
     return this.players()[winnerCode];
   });
   readonly secondsLeft = computed(() => this.state().secondsLeft);
+  readonly lastMove = computed(() => this.state().lastMove);
+  readonly roundEnd = computed(() => this.state().roundEnd);
 
   readonly isRoundOver = computed(() => this.phase() === 'round-over');
   readonly isCpuTurn = computed(() => this.currentPlayer().type === 'cpu');
@@ -69,30 +71,6 @@ export class GameStore {
       }
     }
     return result;
-  });
-
-  /** Live region text: changes on moves, turns, pause and round end, never on timer ticks. */
-  readonly statusMessage = computed(() => {
-    const { phase, players, lastMove, roundEnd } = this.state();
-    const current = this.currentPlayer();
-
-    switch (phase) {
-      case 'idle':
-        return '';
-      case 'paused':
-        return 'Game paused.';
-      case 'round-over': {
-        const winner = this.winner();
-        if (!winner) return 'The board is full. Draw.';
-        const result = `${winner.label} ${winner.winVerb}`;
-        return roundEnd === 'timeout' ? `Time's up. ${result}.` : `${result} with four in a row.`;
-      }
-      case 'running': {
-        if (!lastMove) return `${current.turnLabel}.`;
-        const mover = players[lastMove.player];
-        return `${mover.label} dropped a disc in column ${lastMove.position.column + 1}. ${current.turnLabel}.`;
-      }
-    }
   });
 
   private readonly cpuMove$ = new Subject<void>();

@@ -19,7 +19,7 @@
         z-index: 1;
         bottom: auto;
         height: geo.$back-height-small;
-        background: url('../../../../../public/images/board-layer-black-small.svg') top / 100% 100% no-repeat;
+        background: url('/images/board-layer-black-small.svg') top / 100% 100% no-repeat;
       }
 
       &--discs {
@@ -31,7 +31,7 @@
 
       &--front {
         z-index: 3;
-        background: url('../../../../../public/images/board-layer-white-small.svg') top / 100% 100% no-repeat;
+        background: url('/images/board-layer-white-small.svg') top / 100% 100% no-repeat;
         pointer-events: none;
       }
 
@@ -123,11 +123,11 @@
   @container (min-width: #{geo.$large-assets-min-width}) {
     .board__layer--back {
       height: geo.$back-height-large;
-      background-image: url('../../../../../public/images/board-layer-black-large.svg');
+      background-image: url('/images/board-layer-black-large.svg');
     }
 
     .board__layer--front {
-      background-image: url('../../../../../public/images/board-layer-white-large.svg');
+      background-image: url('/images/board-layer-white-large.svg');
     }
   }
 
