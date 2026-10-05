@@ -5,6 +5,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, skip } from 'rxjs';
+import icons from './icons.svg' with { loader: 'text' };
 import { Footer } from './shared/ui/footer/footer';
 
 @Component({
@@ -15,9 +16,10 @@ import { Footer } from './shared/ui/footer/footer';
 })
 export class App {
   constructor() {
-    inject(MatIconRegistry).addSvgIconSetInNamespace(
+    // Bundled as text: icons render with their component, with no request after bootstrap.
+    inject(MatIconRegistry).addSvgIconSetLiteralInNamespace(
       'custom',
-      inject(DomSanitizer).bypassSecurityTrustResourceUrl('icons/icons.svg'),
+      inject(DomSanitizer).bypassSecurityTrustHtml(icons),
     );
     this.focusPageHeadingOnNavigation();
   }
