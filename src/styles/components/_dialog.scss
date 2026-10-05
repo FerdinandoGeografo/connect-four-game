@@ -9,6 +9,7 @@ html {
   @include mat.dialog-overrides((
     container-color: var(--primary-600),
     container-shape: 4rem,
+    container-elevation-shadow: 0 1rem 0 0 var(--neutral-900),
     container-max-width: layout.$card-width,
     container-small-max-width: calc(100% - 3.4rem),
     container-min-width: min(layout.$card-width, calc(100vw - 3.4rem)),
