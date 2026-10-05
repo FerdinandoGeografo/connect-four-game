@@ -152,6 +152,8 @@ Each disc only receives its `--row` and `--col`, and the drop animation reads th
 
 The board is a group of 7 native `<button>`s, one per column, with a roving tabindex: it is a single tab stop, arrow keys and Home/End move between columns, Enter or Space drop a disc. Each button announces its contents (e.g. "Column 4: Player 1, Player 2 from the bottom, 4 slots free") and uses `aria-disabled`, so focus is not lost during the CPU turn or the pause.
 
+Pointer and keyboard share a single cursor: when focus is already on the board, moving the pointer moves the roving focus too, so the marker, the focus ring and Enter always point at the same column. It listens to `pointermove` instead of `pointerenter`, because Chrome also fires `pointerenter` when the board shifts under a pointer that has not moved.
+
 ```html
 <button
   type="button"
@@ -160,12 +162,13 @@ The board is a group of 7 native `<button>`s, one per column, with a roving tabi
   [attr.aria-label]="columnLabels()[column]"
   [attr.aria-disabled]="!isColumnEnabled(column)"
   [attr.tabindex]="column === focusableColumn() ? 0 : -1"
+  (pointermove)="onColumnPointer(column)"
   (keydown)="onKeydown($event, column)"
   (click)="onColumnClick(column)"
 ></button>
 ```
 
-Moves, turn changes and round results are announced through a visually hidden live region fed by a `computed` of the store, while the timer uses `role="timer"`, so screen readers are not flooded with every second.
+Moves, turn changes and round results are pushed to the CDK `LiveAnnouncer` from an `effect`. Its live element already exists when the text arrives, so even the opening turn is announced, and it sits outside the content the pause dialog hides from assistive technology. The timer uses `role="timer"`, so screen readers are not flooded with every second.
 
 #### Animations
 
