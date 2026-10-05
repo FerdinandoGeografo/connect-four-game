@@ -13,6 +13,7 @@ This is a solution to the [Connect Four game challenge on Frontend Mentor](https
   - [Built with](#built-with)
   - [What I learned](#what-i-learned)
   - [Useful resources](#useful-resources)
+  - [AI Collaboration](#ai-collaboration)
 - [Author](#author)
 
 ## Overview
@@ -120,14 +121,23 @@ this.cpuMove$
 
 #### A responsive board without pixel math
 
-The board is made of the two original SVG layers (black at the back, white at the front), with the discs sliding in between. Instead of computing positions in TypeScript, I measured the assets once and turned every position into a percentage of the board box with Sass functions. Discs, column buttons, focus outline and marker stay aligned at any size, and a container query switches to the large assets when the board is wide enough:
+The board is made of the two original SVG layers (black at the back, white at the front), with the discs sliding in between. Instead of computing positions in TypeScript, I measured the assets once and turned every position into a percentage of the board box with Sass functions. Discs, column buttons, focus ring and marker stay aligned at any size, and a container query switches to the large assets when the board is wide enough:
 
 ```scss
 @function x($px) {
   @return math.percentage(math.div($px, $width));
 }
 
-@mixin at-hole($box-width, $box-height, $centre-x: math.div($box-width, 2), $centre-y: math.div($box-height, 2)) {
+@function column-x($offset: 0) {
+  @return calc(#{x($hole-centre + $offset)} + var(--col) * #{x($pitch)});
+}
+
+@mixin at-hole(
+  $box-width,
+  $box-height,
+  $centre-x: math.div($box-width, 2),
+  $centre-y: math.div($box-height, 2)
+) {
   position: absolute;
   left: column-x(-$centre-x);
   top: calc(#{y($hole-centre - $centre-y)} + var(--row, 0) * #{y($pitch)});
@@ -142,6 +152,19 @@ Each disc only receives its `--row` and `--col`, and the drop animation reads th
 
 The board is a group of 7 native `<button>`s, one per column, with a roving tabindex: it is a single tab stop, arrow keys and Home/End move between columns, Enter or Space drop a disc. Each button announces its contents (e.g. "Column 4: Player 1, Player 2 from the bottom, 4 slots free") and uses `aria-disabled`, so focus is not lost during the CPU turn or the pause.
 
+```html
+<button
+  type="button"
+  class="board__column"
+  [style.--col]="column"
+  [attr.aria-label]="columnLabels()[column]"
+  [attr.aria-disabled]="!isColumnEnabled(column)"
+  [attr.tabindex]="column === focusableColumn() ? 0 : -1"
+  (keydown)="onKeydown($event, column)"
+  (click)="onColumnClick(column)"
+></button>
+```
+
 Moves, turn changes and round results are announced through a visually hidden live region fed by a `computed` of the store, while the timer uses `role="timer"`, so screen readers are not flooded with every second.
 
 #### Animations
@@ -152,6 +175,25 @@ Elements appear and leave with `animate.enter` / `animate.leave` and a few share
 - the turn indicator replays its entrance "pop" when the turn passes, through the Web Animations API, because the element never leaves the DOM;
 - route changes use `withViewTransitions()`, with the logo moving between the main menu and the game toolbar.
 
+The banner hand-off needs no animation code: the layer is tracked by the winner, so a new winner means a new element, and Angular plays the leave animation on the old one while the new one enters.
+
+```ts
+protected readonly bannerLayers = computed(() => [
+  { key: this.gameStore.winnerCode() ?? 'none', color: this.gameStore.winner()?.theme },
+]);
+```
+
+```html
+@for (layer of bannerLayers(); track layer.key) {
+<div
+  class="game__banner-layer"
+  animate.enter="game__banner-enter"
+  animate.leave="game__banner-leave"
+  [style.background-color]="layer.color"
+></div>
+}
+```
+
 As in my previous challenges, the SCSS partials live in `src/styles` and `angular.json` adds that folder to `stylePreprocessorOptions.includePaths`, so components can simply `@use 'media'` or `@use 'board-geometry'`.
 
 ### Useful resources
@@ -161,6 +203,14 @@ As in my previous challenges, the SCSS partials live in `src/styles` and `angula
 - [CSS container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries) - Used to switch between the small and large board assets based on the board's own width.
 - [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) - To replay an animation on an element that stays in the DOM.
 - [Developing a keyboard interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/) - The WAI-ARIA pattern behind the roving tabindex of the board columns.
+
+### AI Collaboration
+
+I used Claude, through Claude Code, as a pair programmer for planning, reviews and the final polish, while keeping the decisions and the testing on my side.
+
+- **Planning first**: before each larger change (the Angular 22 upgrade, the responsive layout, the final polish) I asked for a plan with the problem, the alternatives and the files involved. I reviewed it before any code was written, and every change went on its own `feature/*` branch with small commits that I tested locally before merging.
+- **Accessibility and optimisation reviews**: I used it to audit keyboard navigation, screen reader announcements, focus states, `prefers-reduced-motion` and forced colors, and to hunt for duplicated styles, templates and helpers. Visual changes were checked with scripted browser runs, kept outside the repository, that compare the rendered layout with the design measurements at several viewports.
+- **Context in local files**: a short `CLAUDE.md` with stack, decisions and current status; an `AGENTS.md` with the working rules shared by any coding agent.
 
 ## Author
 
