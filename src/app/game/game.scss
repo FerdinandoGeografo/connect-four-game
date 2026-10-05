@@ -5,7 +5,8 @@
   --board-ratio: calc(632 / 584);
   --board-min: 28rem;
   --chrome-top: 27.1rem;
-  --chrome-bottom: 17rem;
+  // Leaves room for the footer below the turn indicator and outcome card.
+  --chrome-bottom: 20rem;
   // Overlaps on the board from Figma; the turn indicator SVG adds a 2px stroke on top.
   --outcome-overlap: 1.5rem;
   --indicator-overlap: 1.7rem;
@@ -135,7 +136,7 @@
 
   @include up(md) {
     --chrome-top: 24.6rem;
-    --chrome-bottom: 16rem;
+    --chrome-bottom: 17.4rem;
     --outcome-overlap: 4rem;
     --indicator-overlap: 4.2rem;
     --banner-overlap: 4rem;

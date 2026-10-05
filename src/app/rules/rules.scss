@@ -68,6 +68,6 @@
 
   // The desktop frame centres the card alone, the others card and check together.
   @include up(lg) {
-    padding-top: 5.2rem;
+    padding-top: calc(#{layout.$footer-space} + 3.2rem);
   }
 }
