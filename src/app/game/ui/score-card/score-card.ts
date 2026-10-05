@@ -15,6 +15,5 @@ import { Player } from '../../../shared/models/player.model';
 export class ScoreCard {
   player = input.required<Player>();
   score = input.required<number>();
-  /** Which side of the board the card sits on: the avatar is mirrored for 'end'. */
   side = input<'start' | 'end'>('start');
 }

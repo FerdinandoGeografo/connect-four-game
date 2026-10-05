@@ -33,7 +33,6 @@
     }
   }
 
-  // Too narrow for buttons and logo on one row: the logo goes on top.
   @include below(xs) {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:

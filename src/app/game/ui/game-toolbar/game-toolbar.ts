@@ -1,10 +1,10 @@
 import { Component, output } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { Logo } from '../../../shared/ui/logo/logo';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-game-toolbar',
-  imports: [MatButtonModule, Logo],
+  imports: [MatButton, Logo],
   templateUrl: './game-toolbar.html',
   styleUrl: './game-toolbar.scss',
 })

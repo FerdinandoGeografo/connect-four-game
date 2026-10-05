@@ -1,19 +1,5 @@
 @use 'sass:map';
 
-// Mobile-first breakpoints. They mark where the Figma layout changes shape,
-// not the frame widths (375 / 768 / 1440 px). Values are in em because media
-// queries ignore the 10px root font size (1em = 16px).
-//
-// - xs (300px): below it the compact score card cannot fit label and side avatar;
-//   the avatar moves on top, as in the desktop card.
-// - sm (360px): below it (narrow phones, or larger default font sizes, since
-//   em queries follow them) the compact layout loosens its fixed widths.
-// - md (600px): the compact layout (142 × 81 score cards, 40px logo, 15px
-//   overlap of the turn indicator) gives way to the wide one (two 272px score
-//   cards with overlapping avatars ≈ 640px, 52px logo, 40px overlap). The
-//   cards can shrink, so the switch happens before the 768px frame.
-// - lg (1100px): the score cards fit beside the board
-//   (2 × 141px cards + 2 × 60px gaps + 632px board ≈ 1034px, plus gutters).
 $breakpoints: (
   xs: 18.75em,
   sm: 22.5em,
@@ -21,13 +7,7 @@ $breakpoints: (
   lg: 68.75em,
 );
 
-// Landscape screens that are wide enough get the side layout earlier, because
-// stacking score cards above the board would waste the little height there is
-// (e.g. tablets at 1024 × 768).
 $side-layout-landscape-min: 50em;
-
-// Below this height (landscape phones) stacked cards such as the pause menu no
-// longer fit at their design size and switch to a compact variant.
 $short-max-height: 31.25em;
 
 @function breakpoint($name) {
@@ -44,12 +24,11 @@ $short-max-height: 31.25em;
 }
 
 @mixin below($name) {
-  @media (max-width: breakpoint($name) - 0.01em) {
+  @media (max-width: calc(breakpoint($name) - 0.01em)) {
     @content;
   }
 }
 
-// Score cards beside the board (desktop frame layout).
 @mixin side-layout {
   @media (min-width: breakpoint(lg)),
     (orientation: landscape) and (min-width: $side-layout-landscape-min) {

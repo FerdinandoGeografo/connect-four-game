@@ -7,19 +7,14 @@
 />
 
 <div class="game__content">
-  <app-score-card
-    class="game__score game__score--first"
-    side="start"
-    [player]="gameStore.players().first"
-    [score]="gameStore.scores().first"
-  />
-
-  <app-score-card
-    class="game__score game__score--second"
-    side="end"
-    [player]="gameStore.players().second"
-    [score]="gameStore.scores().second"
-  />
+  @for (code of playerCodes; track code) {
+    <app-score-card
+      class="game__score game__score--{{ code }}"
+      [side]="$first ? 'start' : 'end'"
+      [player]="gameStore.players()[code]"
+      [score]="gameStore.scores()[code]"
+    />
+  }
 
   <div class="game__board">
     <app-game-board
@@ -49,32 +44,14 @@
       />
     }
 
-    <!-- One layer per state: on change the new layer rises from the bottom over the old one. -->
     <div class="game__banner" aria-hidden="true">
-      @switch (gameStore.winnerCode()) {
-        @case ('first') {
-          <div
-            class="game__banner-layer"
-            animate.enter="game__banner-enter"
-            animate.leave="game__banner-leave"
-            [style.background-color]="gameStore.players().first.theme"
-          ></div>
-        }
-        @case ('second') {
-          <div
-            class="game__banner-layer"
-            animate.enter="game__banner-enter"
-            animate.leave="game__banner-leave"
-            [style.background-color]="gameStore.players().second.theme"
-          ></div>
-        }
-        @default {
-          <div
-            class="game__banner-layer"
-            animate.enter="game__banner-enter"
-            animate.leave="game__banner-leave"
-          ></div>
-        }
+      @for (layer of bannerLayers(); track layer.key) {
+        <div
+          class="game__banner-layer"
+          animate.enter="game__banner-enter"
+          animate.leave="game__banner-leave"
+          [style.background-color]="layer.color"
+        ></div>
       }
     </div>
   </div>

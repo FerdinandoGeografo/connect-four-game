@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { Logo } from '../shared/ui/logo/logo';
-import { GameStore } from '../shared/data-access/game-store';
-import { MenuItem } from '../shared/models/menu-item.model';
-import { MenuItems } from '../shared/ui/menu-items/menu-items';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { Router } from '@angular/router';
+import { GameStore } from '../shared/data-access/game-store';
+import { GameMode } from '../shared/models/game.model';
+import { MenuItem } from '../shared/models/menu-item.model';
+import { Logo } from '../shared/ui/logo/logo';
+import { MenuItems } from '../shared/ui/menu-items/menu-items';
 
 @Component({
   selector: 'app-main-menu',
@@ -20,32 +21,23 @@ export class MainMenu {
     {
       label: 'Play vs CPU',
       icon: 'player-vs-cpu',
-      onClick: () => this.startPvCpu(),
+      onClick: () => this.startGame('pvcpu'),
     },
     {
       styleClass: 'btn--secondary',
       label: 'Play vs Player',
       icon: 'player-vs-player',
-      onClick: () => this.startPvp(),
+      onClick: () => this.startGame('pvp'),
     },
     {
       styleClass: 'btn--neutral',
       label: 'Game rules',
-      onClick: () => this.navigateToRules(),
+      onClick: () => this.router.navigate(['/rules']),
     },
   ];
 
-  private startPvp() {
-    this.gameStore.startGame('pvp');
+  private startGame(mode: GameMode) {
+    this.gameStore.startGame(mode);
     this.router.navigate(['/game']);
-  }
-
-  private startPvCpu() {
-    this.gameStore.startGame('pvcpu');
-    this.router.navigate(['/game']);
-  }
-
-  private navigateToRules() {
-    this.router.navigate(['/rules']);
   }
 }

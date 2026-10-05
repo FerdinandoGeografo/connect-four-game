@@ -1,11 +1,11 @@
 import { Component, input } from '@angular/core';
-import { MenuItem } from '../../models/menu-item.model';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MenuItem } from '../../models/menu-item.model';
 
 @Component({
   selector: 'app-menu-items',
-  imports: [MatButtonModule, MatIcon],
+  imports: [MatButton, MatIcon],
   templateUrl: './menu-items.html',
   styleUrl: './menu-items.scss',
 })

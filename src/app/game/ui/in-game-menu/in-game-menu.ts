@@ -18,21 +18,17 @@ export class InGameMenu {
     {
       styleClass: 'btn--neutral btn--center',
       label: 'Continue game',
-      onClick: () => this.close('continue'),
+      onClick: () => this.dialogRef.close('continue'),
     },
     {
       styleClass: 'btn--neutral btn--center',
       label: 'Restart',
-      onClick: () => this.close('restart'),
+      onClick: () => this.dialogRef.close('restart'),
     },
     {
       styleClass: 'btn--primary btn--center',
       label: 'Quit game',
-      onClick: () => this.close('quit'),
+      onClick: () => this.dialogRef.close('quit'),
     },
   ];
-
-  private close(action: PauseAction) {
-    this.dialogRef.close(action);
-  }
 }

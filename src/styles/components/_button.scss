@@ -1,24 +1,35 @@
 @use '@angular/material' as mat;
+@use 'media' as *;
+@use 'motion';
 
 .btn {
+  &:is(.mdc-button, .mdc-icon-button) {
+    transition:
+      border-color 0.35s ease-in-out,
+      box-shadow 0.35s ease-in-out,
+      background-color 0.35s ease-in-out,
+      scale 0.25s motion.$ease-out;
+  }
+
   &.mdc-button {
     --state-color: var(--neutral-900);
     justify-content: start;
     text-transform: uppercase;
-    transition:
-      border-color 0.35s ease-in-out,
-      box-shadow 0.35s ease-in-out,
-      background-color 0.35s ease-in-out;
     border: 3px solid var(--state-color);
     box-shadow: 0 1rem 0 0 var(--state-color);
-    // Outside stroke, as in Figma: the layout box is the 72px rectangle.
+    // Outside stroke, as in Figma.
     margin: -0.3rem;
   }
 
-  // Keyboard focus ring; white on the purple surfaces, overridden on white cards.
   &:focus-visible {
-    outline: 0.3rem solid var(--focus-ring, var(--neutral-0));
-    outline-offset: 0.3rem;
+    outline: none;
+    scale: var(--focus-scale, 1.03);
+  }
+
+  @include reduced-motion {
+    &:is(.mdc-button, .mdc-icon-button) {
+      transition-property: border-color, box-shadow, background-color;
+    }
   }
 
   @include mat.button-overrides((
@@ -108,6 +119,8 @@
   }
 
   &--small {
+    --focus-scale: 1.08;
+
     &.mdc-button {
       box-shadow: none;
       border: none;
@@ -122,9 +135,9 @@
     ));
   }
 
-  // 64px circle; the 70 × 75 icon adds the stroke and the shadow around it.
   &.mdc-icon-button {
     --state-color: var(--neutral-900);
+    --focus-scale: 1.1;
     display: block;
 
     .mat-icon {

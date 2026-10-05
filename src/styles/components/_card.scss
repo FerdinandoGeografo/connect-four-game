@@ -13,8 +13,6 @@ html {
   ));
 }
 
-// Figma strokes are outside the shapes: the layout box is the Figma rectangle
-// and the 3px border overflows it.
 .mat-mdc-card {
   margin: -0.3rem;
 }

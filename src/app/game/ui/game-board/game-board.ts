@@ -36,7 +36,6 @@ export class GameBoard {
   cells = input.required<CellData[]>();
   players = input.required<GamePlayers>();
   currentPlayer = input.required<Player>();
-  /** Whether the local player can drop a disc now (running phase, human turn). */
   canPlay = input.required<boolean>();
   playableColumns = input.required<number[]>();
   winningCells = input<WinCells | null>(null);
@@ -47,11 +46,11 @@ export class GameBoard {
   private readonly document = inject(DOCUMENT);
   private readonly columnButtons = viewChildren<ElementRef<HTMLButtonElement>>('columnButton');
 
-  /** Column under the pointer or with keyboard focus; drives marker and preview. */
+  /** Column under the pointer or focused; drives marker and preview. */
   protected readonly activeColumn = signal<number | null>(null);
   /** Roving tabindex: the board is a single tab stop, arrows move between columns. */
   protected readonly focusableColumn = signal(Math.floor(BOARD_COLUMNS / 2));
-  /** Last active column: the marker hides in place instead of sliding back to a default. */
+  /** Keeps the last column, so the marker hides in place instead of sliding back. */
   protected readonly markerColumn = linkedSignal<number | null, number>({
     source: this.activeColumn,
     computation: (column, previous) => column ?? previous?.value ?? Math.floor(BOARD_COLUMNS / 2),
@@ -86,7 +85,6 @@ export class GameBoard {
     return this.canPlay() && this.playableColumns().includes(column);
   }
 
-  /** Position of the disc in the winning line (0-3), used to stagger its highlight; null otherwise. */
   protected winIndex(cell: CellData) {
     const { row, column } = cell.position;
     const index = this.winningCells()?.findIndex((c) => c.row === row && c.column === column) ?? -1;

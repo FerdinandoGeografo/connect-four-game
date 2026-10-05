@@ -1,43 +1,28 @@
 @use 'sass:math';
 
-// Board geometry measured on the original assets (board-layer-*-large.svg,
-// 632 × 584). The small assets (335 × 310) use the same proportions, so every
-// position is expressed as a percentage of the board box and stays aligned at
-// any rendered size.
 $width: 632;
 $height: 584;
-$pitch: 88; // distance between hole centres, both axes
-$hole-centre: 52; // centre of the first hole from the top/left edge
+$pitch: 88;
+$hole-centre: 52;
 $hole-size: 64;
 $corner-radius: 40;
 
-// `counter` icon: 70 × 75 (disc of 70 plus a 5px shadow), disc centre at 35 × 35.
+
 $disc-width: 70;
 $disc-height: 75;
 $disc-centre: 35;
 
-// `marker` icon: 38 × 36; its tip is at y ≈ 30. In the frames the marker top
-// sits 9.5px above the board edge (tip 18px into the frame); here it is raised
-// so the tip rests on the edge and the bounce stays clear of the holes.
 $marker-width: 38;
 $marker-height: 36;
 $marker-top: -30;
-// Distance (in marker heights) the marker travels upward while hiding.
 $marker-hide-offset: -70%;
 
-// Focus pill around a column of holes: 12px above the first hole, 12px below
-// the last one (holes span 20 → 524), 6px on each side of the 64px holes.
 $focus-inset-top: 12;
 $focus-inset-bottom: $height - 532;
 $focus-inset-x: math.percentage(math.div(($pitch - $hole-size) * 0.5 - 6, $pitch));
-
-// The small black layer (335 × 320) and the large one (632 × 594) are taller
-// than the white layer because of their drop shadow.
 $back-height-small: math.div(320, 310) * 100%;
 $back-height-large: math.div(594, $height) * 100%;
 
-// Above this rendered width the large assets look closer to the design
-// (thinner strokes) than the small ones scaled up.
 $large-assets-min-width: 460px;
 
 @function x($px) {
@@ -48,13 +33,15 @@ $large-assets-min-width: 460px;
   @return math.percentage(math.div($px, $height));
 }
 
-// Distance between two rows expressed in disc heights, for translateY().
+@function column-x($offset: 0) {
+  @return calc(#{x($hole-centre + $offset)} + var(--col) * #{x($pitch)});
+}
+
 $row-pitch-in-discs: math.percentage(math.div($pitch, $disc-height));
 
-// Positions a box of the given size centred on the hole at (--col, --row).
 @mixin at-hole($box-width, $box-height, $centre-x: math.div($box-width, 2), $centre-y: math.div($box-height, 2)) {
   position: absolute;
-  left: calc(#{x($hole-centre - $centre-x)} + var(--col) * #{x($pitch)});
+  left: column-x(-$centre-x);
   top: calc(#{y($hole-centre - $centre-y)} + var(--row, 0) * #{y($pitch)});
   width: x($box-width);
   height: y($box-height);

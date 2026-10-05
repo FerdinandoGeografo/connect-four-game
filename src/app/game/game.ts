@@ -1,7 +1,8 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, computed, DestroyRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GameStore } from '../shared/data-access/game-store';
+import { PLAYER_CODES } from '../shared/models/player.model';
 import { GameBoard } from './ui/game-board/game-board';
 import { GameToolbar } from './ui/game-toolbar/game-toolbar';
 import { InGameMenu, PauseAction } from './ui/in-game-menu/in-game-menu';
@@ -19,6 +20,10 @@ export class Game {
   private readonly dialog = inject(MatDialog);
   private readonly router = inject(Router);
   protected readonly gameStore = inject(GameStore);
+  protected readonly playerCodes = PLAYER_CODES;
+  protected readonly bannerLayers = computed(() => [
+    { key: this.gameStore.winnerCode() ?? 'none', color: this.gameStore.winner()?.theme },
+  ]);
 
   constructor() {
     // Leaving the route (e.g. browser back) must not keep the turn timer running.
@@ -31,7 +36,6 @@ export class Game {
     this.dialog
       .open<InGameMenu, void, PauseAction>(InGameMenu, {
         ariaLabelledBy: 'pause-dialog-title',
-        // Lets the menu scroll instead of overflowing on landscape phones.
         maxHeight: 'calc(100dvh - 2rem)',
       })
       .afterClosed()

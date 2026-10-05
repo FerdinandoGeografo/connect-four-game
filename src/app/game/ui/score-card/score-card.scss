@@ -1,9 +1,27 @@
 @use '@angular/material' as mat;
 @use 'media' as *;
 
-// Mobile: compact card (142 × 81) with the avatar overlapping its outer side.
-// md: wide card (272 × 100), label and score on one row.
-// Side layout: tall card (141 × 160) with the avatar overlapping its top.
+@mixin avatar-on-top($content-padding, $content-height: auto) {
+  padding-top: 2.7rem;
+
+  &,
+  &.score--end {
+    .score__icon {
+      top: 0;
+      left: 50%;
+      right: auto;
+      translate: -50% 0;
+    }
+
+    .score__content {
+      flex-direction: column;
+      justify-content: flex-start;
+      height: $content-height;
+      padding: $content-padding;
+    }
+  }
+}
+
 :host {
   display: block;
   position: relative;
@@ -49,7 +67,6 @@
     translate: 50% -50%;
   }
 
-  // Narrow cards: centre the text in the part not covered by the avatar.
   @include below(sm) {
     .score__content {
       padding-left: 2.7rem;
@@ -61,26 +78,10 @@
   }
 
   @include below(xs) {
-    padding-top: 2.7rem;
-
-    &,
-    &.score--end {
-      .score__icon {
-        top: 0;
-        left: 50%;
-        right: auto;
-        translate: -50% 0;
-      }
-
-      .score__content {
-        height: auto;
-        padding: 3.6rem 0.5rem 1rem;
-      }
-    }
+    @include avatar-on-top(3.6rem 0.5rem 1rem);
   }
 
   @include up(md) {
-    // Tablet frame: the avatar circle (not its shadow) is centred on the card.
     .score__icon {
       translate: -50% -2.7rem;
     }
@@ -120,23 +121,6 @@
   }
 
   @include side-layout {
-    padding-top: 2.7rem;
-
-    &,
-    &.score--end {
-      .score__icon {
-        top: 0;
-        left: 50%;
-        right: auto;
-        translate: -50% 0;
-      }
-
-      .score__content {
-        flex-direction: column;
-        justify-content: flex-start;
-        height: 16rem;
-        padding: 4.6rem 1rem 0;
-      }
-    }
+    @include avatar-on-top(4.6rem 1rem 0, 16rem);
   }
 }

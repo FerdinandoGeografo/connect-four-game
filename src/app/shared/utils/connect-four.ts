@@ -43,7 +43,11 @@ export function placeDisc(board: Board, column: number, player: PlayerCode): Dis
 }
 
 /** Looks for a line of CONNECT_LENGTH discs through the given cell. */
-export function findWin(board: Board, { row, column }: CellPosition, player: PlayerCode): WinCells | null {
+export function findWin(
+  board: Board,
+  { row, column }: CellPosition,
+  player: PlayerCode,
+): WinCells | null {
   for (const { row: dRow, column: dCol } of WIN_DIRECTIONS) {
     const forward = collectLine(board, row, column, dRow, dCol, player);
     const backward = collectLine(board, row, column, -dRow, -dCol, player);
@@ -56,10 +60,7 @@ export function findWin(board: Board, { row, column }: CellPosition, player: Pla
   return null;
 }
 
-/**
- * CPU heuristic: win if possible, otherwise block the opponent's win,
- * otherwise play as close to the centre as possible.
- */
+/** CPU heuristic: win, else block the opponent's win, else play closest to the centre. */
 export function chooseCpuColumn(
   board: Board,
   cpu: PlayerCode,

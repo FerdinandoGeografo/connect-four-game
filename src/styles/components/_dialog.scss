@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use 'layout';
 
 html {
   .mdc-dialog__surface {
@@ -8,12 +9,13 @@ html {
   @include mat.dialog-overrides((
     container-color: var(--primary-600),
     container-shape: 4rem,
-    container-max-width: 48.6rem,
+    container-elevation-shadow: 0 1rem 0 0 var(--neutral-900),
+    container-max-width: layout.$card-width,
     container-small-max-width: calc(100% - 3.4rem),
-    container-min-width: min(48.6rem, calc(100vw - 3.4rem)),
+    container-min-width: min(layout.$card-width, calc(100vw - 3.4rem)),
   ));
 
   .cdk-overlay-backdrop {
-    background: rgba(0,0,0, .5);
+    background: rgb(0 0 0 / 50%);
   }
 }
