@@ -102,15 +102,30 @@ export class GameBoard {
     if (target === null) return;
 
     event.preventDefault();
-    this.focusableColumn.set(target);
-    this.columnButtons()[target]?.nativeElement.focus();
+    this.focusColumn(target);
+  }
+
+  // One cursor: with focus in the board the pointer moves it too, so Enter drops under the marker.
+  // Not on pointerenter: Chrome also fires it when the board shifts under an idle pointer.
+  protected onColumnPointer(column: number) {
+    this.activeColumn.set(column);
+    if (this.focusedColumn() !== -1) this.focusColumn(column, { preventScroll: true });
   }
 
   protected onBoardLeave() {
-    const focused = this.columnButtons().findIndex(
+    const focused = this.focusedColumn();
+    this.activeColumn.set(focused === -1 ? null : focused);
+  }
+
+  private focusedColumn() {
+    return this.columnButtons().findIndex(
       (button) => button.nativeElement === this.document.activeElement,
     );
-    this.activeColumn.set(focused === -1 ? null : focused);
+  }
+
+  private focusColumn(column: number, options?: FocusOptions) {
+    this.focusableColumn.set(column);
+    this.columnButtons()[column]?.nativeElement.focus(options);
   }
 
   private keyboardTarget(key: string, column: number): number | null {
