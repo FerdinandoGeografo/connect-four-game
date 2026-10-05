@@ -1,7 +1,6 @@
 @use 'layout';
 @use 'media' as *;
 
-// Below md the card has no surface: logo and buttons sit on the page background.
 :host {
   @include layout.centered-page;
 

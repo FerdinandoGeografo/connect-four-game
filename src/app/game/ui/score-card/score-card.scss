@@ -67,7 +67,6 @@
     translate: 50% -50%;
   }
 
-  // Narrow cards: centre the text in the part not covered by the avatar.
   @include below(sm) {
     .score__content {
       padding-left: 2.7rem;
@@ -83,7 +82,6 @@
   }
 
   @include up(md) {
-    // The avatar circle, not its shadow, is centred on the card.
     .score__icon {
       translate: -50% -2.7rem;
     }

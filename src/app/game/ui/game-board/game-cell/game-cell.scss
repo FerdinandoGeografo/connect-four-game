@@ -3,9 +3,8 @@
 @use 'board-geometry' as geo;
 @use 'motion';
 
-// Lands halfway through, then three smaller bounces; longer falls last longer.
+
 $drop-duration: calc(0.55s + var(--row) * 0.08s);
-// Rings appear along the line once the last disc has settled, then pulse.
 $ring-delay: calc(0.9s + var(--win-index, 0) * 0.1s);
 $ring-pulse-delay: calc(1.25s + var(--win-index, 0) * 0.1s);
 
@@ -23,7 +22,6 @@ $ring-pulse-delay: calc(1.25s + var(--win-index, 0) * 0.1s);
     height: 100%;
   }
 
-  // Figma ring (34px); the win is not conveyed by colour alone.
   &.winning::after {
     content: '';
     position: absolute;

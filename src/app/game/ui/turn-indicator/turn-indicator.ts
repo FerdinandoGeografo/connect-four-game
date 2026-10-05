@@ -6,7 +6,6 @@ import { skip } from 'rxjs';
 import { Player } from '../../../shared/models/player.model';
 
 const EASE_OUT = 'cubic-bezier(0.2, 0.8, 0.2, 1)';
-// The entrance pop-in without the fade: the indicator is already visible.
 const TURN_SWAP: Keyframe[] = [
   { scale: 0.6, easing: EASE_OUT },
   { scale: 1.04, offset: 0.7, easing: EASE_OUT },

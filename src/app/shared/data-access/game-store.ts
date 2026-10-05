@@ -22,8 +22,8 @@ import {
   placeDisc,
 } from '../utils/connect-four';
 
-const CPU_THINK_MIN_MS = 1250;
-const CPU_THINK_MAX_MS = 2500;
+const CPU_THINK_MIN_MS = 1000;
+const CPU_THINK_MAX_MS = 2000;
 
 @Service()
 export class GameStore {

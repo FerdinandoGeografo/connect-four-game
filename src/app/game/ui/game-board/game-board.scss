@@ -86,12 +86,6 @@
           scale: 1;
         }
       }
-
-      @media (forced-colors: active) {
-        &::after {
-          border-color: Highlight;
-        }
-      }
     }
 
     &__marker {
@@ -121,7 +115,6 @@
     }
   }
 
-  // After a win the other discs step back so the line of four stands out.
   &.board--won app-game-cell:not(.winning) {
     filter: brightness(0.85) saturate(0.8);
     transition: filter 0.5s ease 0.8s;

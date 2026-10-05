@@ -3,7 +3,6 @@
 @use 'motion';
 
 .btn {
-  // Material sets its own `transition` on filled buttons: win on specificity.
   &:is(.mdc-button, .mdc-icon-button) {
     transition:
       border-color 0.35s ease-in-out,
@@ -22,18 +21,9 @@
     margin: -0.3rem;
   }
 
-  // Hover colours plus a slight growth: an outline would cut through the shadow.
   &:focus-visible {
     outline: none;
     scale: var(--focus-scale, 1.03);
-
-    // Material sets a 1px outline on every button in forced colors: win on specificity.
-    @media (forced-colors: active) {
-      &:is(.mdc-button, .mdc-icon-button) {
-        outline: 0.3rem solid Highlight;
-        outline-offset: 0.3rem;
-      }
-    }
   }
 
   @include reduced-motion {
@@ -145,7 +135,6 @@
     ));
   }
 
-  // 64px circle; the 70 × 75 icon adds the stroke and the shadow around it.
   &.mdc-icon-button {
     --state-color: var(--neutral-900);
     --focus-scale: 1.1;

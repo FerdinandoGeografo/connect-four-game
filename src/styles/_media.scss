@@ -1,17 +1,13 @@
 @use 'sass:map';
 
-// Mobile-first, in em because media queries ignore the 10px root font size.
-// Values mark where the layout changes shape, not the 375 / 768 / 1440 frames.
 $breakpoints: (
-  xs: 18.75em, // 300px: the compact score card moves its avatar on top
-  sm: 22.5em, // 360px: the compact layout loosens its fixed widths
-  md: 37.5em, // 600px: wide score cards and toolbar, large overlaps
-  lg: 68.75em, // 1100px: score cards beside the board
+  xs: 18.75em,
+  sm: 22.5em,
+  md: 37.5em,
+  lg: 68.75em,
 );
 
-// Landscape tablets (e.g. 1024 × 768) get the side layout earlier to save height.
 $side-layout-landscape-min: 50em;
-// Landscape phones: stacked cards such as the pause menu switch to a compact variant.
 $short-max-height: 31.25em;
 
 @function breakpoint($name) {
@@ -28,7 +24,7 @@ $short-max-height: 31.25em;
 }
 
 @mixin below($name) {
-  @media (max-width: breakpoint($name) - 0.01em) {
+  @media (max-width: calc(breakpoint($name) - 0.01em)) {
     @content;
   }
 }

@@ -1,15 +1,11 @@
 @use 'media' as *;
 
-// Emits no CSS: keyframes live in _animations.scss, so components share one global copy.
-
 $ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 $ease-in: cubic-bezier(0.4, 0, 1, 1);
 $enter-duration: 0.45s;
 $stagger: 0.07s;
 
-// With reduced motion, enter() and leave() become short fades.
 @mixin enter($name: rise-in, $delay: 0s, $duration: $enter-duration) {
-  // Backwards only: a forwards fill would keep overriding properties such as `scale`.
   animation: $name $duration $ease-out $delay backwards;
 
   @include reduced-motion {

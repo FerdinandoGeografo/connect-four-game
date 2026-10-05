@@ -21,7 +21,6 @@ export class Game {
   private readonly router = inject(Router);
   protected readonly gameStore = inject(GameStore);
   protected readonly playerCodes = PLAYER_CODES;
-  // A new key re-creates the layer, so it rises over the previous one.
   protected readonly bannerLayers = computed(() => [
     { key: this.gameStore.winnerCode() ?? 'none', color: this.gameStore.winner()?.theme },
   ]);
@@ -37,7 +36,6 @@ export class Game {
     this.dialog
       .open<InGameMenu, void, PauseAction>(InGameMenu, {
         ariaLabelledBy: 'pause-dialog-title',
-        // Scrolls instead of overflowing on landscape phones.
         maxHeight: 'calc(100dvh - 2rem)',
       })
       .afterClosed()

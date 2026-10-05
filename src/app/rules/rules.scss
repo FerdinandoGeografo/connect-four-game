@@ -30,7 +30,6 @@
       color: var(--primary-600);
     }
 
-    // The first line fills the 295px mobile box exactly; Figma wraps it.
     &__text {
       padding-right: 0.1rem;
     }
@@ -51,7 +50,6 @@
       font-weight: 700;
     }
 
-    // Check circle centred on the bottom edge of the card.
     &__back {
       position: relative;
       z-index: 1;
