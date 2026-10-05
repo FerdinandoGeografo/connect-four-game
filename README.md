@@ -51,7 +51,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [GitHub Repository](https://github.com/FerdinandoGeografo/connect-four-game)
-- Live Site URL: [Connect Four](https://your-live-site-url.com)
+- Live Site URL: [Connect Four](https://connect-four-game-fg.netlify.app/main-menu)
 
 ## My process
 
