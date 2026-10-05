@@ -132,7 +132,12 @@ The board is made of the two original SVG layers (black at the back, white at th
   @return calc(#{x($hole-centre + $offset)} + var(--col) * #{x($pitch)});
 }
 
-@mixin at-hole($box-width, $box-height, $centre-x: math.div($box-width, 2), $centre-y: math.div($box-height, 2)) {
+@mixin at-hole(
+  $box-width,
+  $box-height,
+  $centre-x: math.div($box-width, 2),
+  $centre-y: math.div($box-height, 2)
+) {
   position: absolute;
   left: column-x(-$centre-x);
   top: calc(#{y($hole-centre - $centre-y)} + var(--row, 0) * #{y($pitch)});
@@ -180,12 +185,12 @@ protected readonly bannerLayers = computed(() => [
 
 ```html
 @for (layer of bannerLayers(); track layer.key) {
-  <div
-    class="game__banner-layer"
-    animate.enter="game__banner-enter"
-    animate.leave="game__banner-leave"
-    [style.background-color]="layer.color"
-  ></div>
+<div
+  class="game__banner-layer"
+  animate.enter="game__banner-enter"
+  animate.leave="game__banner-leave"
+  [style.background-color]="layer.color"
+></div>
 }
 ```
 
@@ -205,7 +210,7 @@ I used Claude, through Claude Code, as a pair programmer for planning, reviews a
 
 - **Planning first**: before each larger change (the Angular 22 upgrade, the responsive layout, the final polish) I asked for a plan with the problem, the alternatives and the files involved. I reviewed it before any code was written, and every change went on its own `feature/*` branch with small commits that I tested locally before merging.
 - **Accessibility and optimisation reviews**: I used it to audit keyboard navigation, screen reader announcements, focus states, `prefers-reduced-motion` and forced colors, and to hunt for duplicated styles, templates and helpers. Visual changes were checked with scripted browser runs, kept outside the repository, that compare the rendered layout with the design measurements at several viewports.
-- **Context in local files**: a short `CLAUDE.md` with stack, decisions and current status; an `AGENTS.md` with the working rules shared by any coding agent (git flow, comment style, accessibility, never commit the premium design files); and a longer notes file with measurements, board geometry and known limits, read only when a task needs it. These files are gitignored and never pushed: they are my working setup, not part of the solution.
+- **Context in local files**: a short `CLAUDE.md` with stack, decisions and current status; an `AGENTS.md` with the working rules shared by any coding agent.
 
 ## Author
 
